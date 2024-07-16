@@ -48,3 +48,7 @@ La première règle sera de valider que le géniteur est née avant la saillie.\
 Dans un premier temps, nous commencons par écrire un test simple `should_validate_date_naissance`.\
 Dans un second temps, cette fonctionnalité est intégrée à notre entité métier `Geniteur`. Le test `should_validate_date_naissance_geniteur` valide son bon fonctionnement.
 
+### branch feature/step3
+
+Nous implémentons la partie port (User-side).\
+La méthode `execute` définie dans l'interface `ValidateGeniteur`(port User-side) est implémentée par `GeniteurUseCase`.
