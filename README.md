@@ -9,6 +9,12 @@
 mvn clean install -U
 cd infrastructure
 mvn spring-boot:run
+
+curl -v --header "Content-Type: application/json" \
+--request POST \
+--data '{"id":1,"dateSaillie":null,"dateNaissance":"01/01/2021"}' \
+http://localhost:1977/validateGeniteur
+
 ```
 
 ### branch feature/step1
@@ -52,3 +58,12 @@ Dans un second temps, cette fonctionnalité est intégrée à notre entité mét
 
 Nous implémentons la partie port (User-side).\
 La méthode `execute` définie dans l'interface `ValidateGeniteur`(port User-side) est implémentée par `GeniteurUseCase`.
+
+### branch feature/step4
+
+Nous implémentons la partie adapter (User-side).\
+Dans le module `infrastructure`, l'objet `GeniteurRequest` est crée.\
+Un endpoint `/validateGeniteur` est crée pour valider la règle "le géniteur est née avant la saillie"
+
+Dans un premier temps, nous mettons en place des règles de validation s/ l'objet `GeniteurRequest` en validant en amont le format des dates de saillie et de naissance transmises.\
+Puis dans un second temps, nous validons la règle métier.

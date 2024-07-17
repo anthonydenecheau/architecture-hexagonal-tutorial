@@ -53,7 +53,11 @@ public class GeniteurUseCaseTest {
         ValidateGeniteur validateGeniteur = new GeniteurUseCase();
         //When
         String result = null;
-        result = validateGeniteur.execute(dateSaillie, this.geniteur);
+        try  {
+            result = validateGeniteur.execute(dateSaillie, this.geniteur);
+        } catch (Exception e) {
+            result = e.getMessage();
+        }
         //Then
         assertThat(result).isEqualTo("Le géniteur est validé");
     }
@@ -66,9 +70,14 @@ public class GeniteurUseCaseTest {
         ValidateGeniteur validateGeniteur = new GeniteurUseCase();
         //When
         String result = null;
-        result = validateGeniteur.execute(dateSaillie, this.geniteur);
+        try {
+            result = validateGeniteur.execute(dateSaillie, this.geniteur);
+        } catch (Exception e) {
+            result = e.getMessage();
+        }
+
         //Then
-        assertThat(result).isEqualTo("Le géniteur n'est pas validé");
+        assertThat(result).isEqualTo("le géniteur est née avant la saillie");
     }
 
 }
