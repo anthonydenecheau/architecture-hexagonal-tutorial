@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import fr.scc.saillie.api.ValidateGeniteur;
 import fr.scc.saillie.dto.GeniteurRequest;
-import fr.scc.saillie.error.GeniteurException;
+import fr.scc.saillie.geniteur.api.ValidateGeniteur;
+import fr.scc.saillie.geniteur.error.GeniteurException;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 

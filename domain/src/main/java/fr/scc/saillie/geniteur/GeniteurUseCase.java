@@ -1,12 +1,12 @@
-package fr.scc.saillie;
+package fr.scc.saillie.geniteur;
 
 import java.time.LocalDate;
 
-import fr.scc.ddd.DomainService;
-import fr.scc.saillie.api.ValidateGeniteur;
-import fr.scc.saillie.error.GeniteurException;
-import fr.scc.saillie.model.Geniteur;
-import fr.scc.saillie.spi.RaceInventory;
+import fr.scc.saillie.ddd.DomainService;
+import fr.scc.saillie.geniteur.api.ValidateGeniteur;
+import fr.scc.saillie.geniteur.error.GeniteurException;
+import fr.scc.saillie.geniteur.model.Geniteur;
+import fr.scc.saillie.geniteur.spi.RaceInventory;
 
 @DomainService
 public class GeniteurUseCase implements ValidateGeniteur {

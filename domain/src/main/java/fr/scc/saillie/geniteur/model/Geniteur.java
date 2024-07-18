@@ -1,4 +1,4 @@
-package fr.scc.saillie.model;
+package fr.scc.saillie.geniteur.model;
 
 import java.time.LocalDate;
 import java.time.YearMonth;

@@ -1,10 +1,11 @@
-package fr.scc.saillie.spi.stubs;
+package fr.scc.saillie.geniteur.spi.stubs;
 
 import java.text.ParseException;
 
-import fr.scc.ddd.Stub;
-import fr.scc.saillie.model.Race;
-import fr.scc.saillie.spi.RaceInventory;
+import fr.scc.saillie.ddd.Stub;
+import fr.scc.saillie.geniteur.error.GeniteurException;
+import fr.scc.saillie.geniteur.model.Race;
+import fr.scc.saillie.geniteur.spi.RaceInventory;
 
 @Stub
 public class RaceInventoryStub implements RaceInventory {
@@ -34,7 +35,7 @@ public class RaceInventoryStub implements RaceInventory {
     }
 
     @Override
-    public Race byGeniteurId(Integer id) {
+    public Race byGeniteurId(Integer id) throws GeniteurException {
         return race;
     }
     

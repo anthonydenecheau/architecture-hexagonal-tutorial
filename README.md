@@ -21,7 +21,7 @@ http://localhost:1977/validateGeniteur
 
 Structure du projet
 
-* module domain (Business Logic)
+* module domain `geniteur` (Business Logic)
 ```
  - | api 
     Application protocol interface == port
@@ -82,7 +82,7 @@ Côté module infrastucture, pour que le Stub soit pris en charge, il faut ajout
 ```
     @TestConfiguration
     @ComponentScan(
-            basePackages = {"fr.scc.saillie"},
+            basePackages = {"fr.scc.saillie.geniteur"},
             includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Stub.class})})
     static class StubConfiguration {
     }
@@ -91,7 +91,7 @@ Pour le démarrage de l'application, il faut également préciser la partie Stub
 ```
    @Configuration
    @ComponentScan(
-         basePackages = {"fr.scc.saillie"},
+         basePackages = {"fr.scc.saillie.geniteur"},
          includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {DomainService.class,Stub.class})})
    public class DomainConfiguration {
    }
@@ -105,7 +105,7 @@ Nous désactivons le stub mis en place au step5
 ```
     @TestConfiguration
     @ComponentScan(
-            basePackages = {"fr.scc.saillie"},
+            basePackages = {"fr.scc.saillie.geniteur"},
             includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Stub.class})},
             excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {RaceInventoryStub.class})})
     static class StubConfiguration {
@@ -115,9 +115,17 @@ Nous désactivons le stub mis en place au step5
 ```
    @Configuration
    @ComponentScan(
-         basePackages = {"fr.scc.saillie"},
-         includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {DomainService.class,Stub.class})},
-         excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {RaceInventoryStub.class})})
+         basePackages = {"fr.scc.saillie.geniteur"},
+         includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {DomainService.class,Stub.class})})
    public class DomainConfiguration {
    }
 ```
+
+Toujours depuis nos tests, nous mettons en place la partie Bdd (`testcontainers`, `flywaydb`)\
+Nous faisons le choix d'une Bdd Oracle afin de pouvoir reprendre les packages Oracle dans lesquels sont intégrés des règles métier, règles qui pourront progressivement être migrées dans le module `domain`.
+
+Nous définissions dans le fichier `application.properties` les éléments de connexion à la Bdd du `testcontainer`.\
+Nous créons un fichier pour initialiser le schéma (`flywaydb`) via le fichier `V1__init.sql`.
+
+Il nous reste à compléter le repository `RaceRepository`et le mapper qui va alimenter l'objet `Race` du domain.
+

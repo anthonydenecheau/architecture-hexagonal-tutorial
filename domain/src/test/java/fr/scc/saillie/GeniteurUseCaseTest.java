@@ -1,6 +1,5 @@
 package fr.scc.saillie;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -11,9 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import fr.scc.saillie. api.ValidateGeniteur;
-import fr.scc.saillie.model.Geniteur;
-import fr.scc.saillie.model.Race;
+import fr.scc.saillie.geniteur.GeniteurUseCase;
+import fr.scc.saillie.geniteur.api.ValidateGeniteur;
+import fr.scc.saillie.geniteur.model.Geniteur;
+import fr.scc.saillie.geniteur.model.Race;
 
 public class GeniteurUseCaseTest {
 
