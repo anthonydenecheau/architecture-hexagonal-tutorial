@@ -38,7 +38,7 @@ public class RaceRepository implements RaceInventory {
         return race;
     }
 
-    public Race Step5_byGeniteurId(Integer id) throws GeniteurException {
+    public Race Step6_byGeniteurId(Integer id) throws GeniteurException {
         return new Race(56, 12);
     }
 
