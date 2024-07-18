@@ -62,7 +62,7 @@ La méthode `execute` définie dans l'interface `ValidateGeniteur`(port User-sid
 ### branch feature/step4
 
 Nous implémentons la partie adapter (User-side).\
-Dans le module `infrastructure`, l'objet `GeniteurRequest` est crée.\
+Dans le module `infrastructure`, l'objet `GeniteurRequest` est crée. Il implémente le port `ValidateGeniteur`.\
 Un endpoint `/validateGeniteur` est crée pour valider la règle "le géniteur est née avant la saillie"
 
 Dans un premier temps, nous mettons en place des règles de validation s/ l'objet `GeniteurRequest` en validant en amont le format des dates de saillie et de naissance transmises.\
@@ -93,6 +93,31 @@ Pour le démarrage de l'application, il faut également préciser la partie Stub
    @ComponentScan(
          basePackages = {"fr.scc.saillie"},
          includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {DomainService.class,Stub.class})})
+   public class DomainConfiguration {
+   }
+```
+
+### branch feature/step6
+
+Nous implémentons la partie adapter (Server-side).\
+Dans le module `infrastructure`, l'objet `RaceRepository` est crée. Il implémente le port `RaceInventory`.\
+Nous désactivons le stub mis en place au step5
+```
+    @TestConfiguration
+    @ComponentScan(
+            basePackages = {"fr.scc.saillie"},
+            includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Stub.class})},
+            excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {RaceInventoryStub.class})})
+    static class StubConfiguration {
+    }
+```
+
+```
+   @Configuration
+   @ComponentScan(
+         basePackages = {"fr.scc.saillie"},
+         includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {DomainService.class,Stub.class})},
+         excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {RaceInventoryStub.class})})
    public class DomainConfiguration {
    }
 ```
