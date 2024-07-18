@@ -1,4 +1,4 @@
-package fr.scc.ddd;
+package fr.scc.saillie.ddd;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

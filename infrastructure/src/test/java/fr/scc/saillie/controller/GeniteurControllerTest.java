@@ -2,6 +2,9 @@ package fr.scc.saillie.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -10,6 +13,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import fr.scc.saillie.config.DomainConfiguration;
+import fr.scc.saillie.ddd.Stub;
+import fr.scc.saillie.geniteur.spi.stubs.RaceInventoryStub;
 
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.DisplayName;
@@ -61,4 +66,10 @@ public class GeniteurControllerTest {
                 ;
     }
 
+    @TestConfiguration
+    @ComponentScan(
+            basePackages = {"fr.scc.saillie.geniteur"},
+            includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Stub.class})})
+    static class StubConfiguration {
+    }
 }

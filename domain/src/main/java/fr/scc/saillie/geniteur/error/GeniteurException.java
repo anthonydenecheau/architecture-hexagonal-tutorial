@@ -1,4 +1,4 @@
-package fr.scc.saillie.error;
+package fr.scc.saillie.geniteur.error;
 
 import java.util.List;
 

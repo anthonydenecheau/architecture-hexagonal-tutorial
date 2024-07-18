@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-import fr.scc.saillie.model.Geniteur;
+import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.validator.CheckDateFormat;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
