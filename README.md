@@ -122,7 +122,7 @@ Nous désactivons le stub mis en place au step5
 ```
 
 Toujours depuis nos tests, nous mettons en place la partie Bdd (`testcontainers`, `flywaydb`)\
-Nous faisons le choix d'une Bdd Oracle afin de pouvoir reprendre les packages Oracle dans lesquels sont intégrés des règles métier, règles qui pourront progressivement être migrées dans le module `domain`.
+Nous faisons le choix d'une Bdd Oracle afin de pouvoir reprendre les packages Oracle dans lesquels sont intégrées des règles métier, règles qui pourront progressivement être migrées dans le module `domain`.
 
 Nous définissions dans le fichier `application.properties` les éléments de connexion à la Bdd du `testcontainer`.\
 Nous créons un fichier pour initialiser le schéma (`flywaydb`) via le fichier `V1__init.sql`.

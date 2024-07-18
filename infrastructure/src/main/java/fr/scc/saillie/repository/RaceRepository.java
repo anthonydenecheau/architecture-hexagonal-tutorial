@@ -30,13 +30,16 @@ public class RaceRepository implements RaceInventory {
         try {
             race = jdbcTemplate.queryForObject(sql, new RaceMapper(), new Object[]{(Object) id});
         } catch (EmptyResultDataAccessException e) {
-            throw new GeniteurException("Aucun chien trouvé avec l'identifiant : " + id, null);
+            throw new GeniteurException("Aucune race trouvée pour le chien : " + id, null);
         } catch (Exception e) {
-            System.out.println("Error byIdentifiant : " + e.getMessage());
+            System.out.println("Error byGeniteurId : " + e.getMessage());
             return null;
         }
         return race;
-        //return new Race(56, 12);
+    }
+
+    public Race Step5_byGeniteurId(Integer id) throws GeniteurException {
+        return new Race(56, 12);
     }
 
 }
