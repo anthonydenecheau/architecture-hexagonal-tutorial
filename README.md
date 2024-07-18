@@ -67,3 +67,32 @@ Un endpoint `/validateGeniteur` est crée pour valider la règle "le géniteur e
 
 Dans un premier temps, nous mettons en place des règles de validation s/ l'objet `GeniteurRequest` en validant en amont le format des dates de saillie et de naissance transmises.\
 Puis dans un second temps, nous validons la règle métier.
+
+### branch feature/step5
+
+Une nouvelle règle est donnée : pour une race donnée, le chien doit avoir un âge minimum pour être autorisé à reproduire.\
+Cette information doit être extraite de la bdd.\
+Il est l'heure de mettre en place la partie repository (port Service-side). Nous repartons donc dans le module `domain`.\
+Note: à cette étape, nous imaginons une équipe dev qui travaille s/ le Front et donc pour ne pas les retarder dans leur développement, nous allons stubber cette information.
+
+Nous implémentons la partie port (Server-side).\
+La méthode `byGeniteurId` définie dans l'interface `RaceInventory`(port Server-side) est stubbée dans `RaceInventoryStub`.
+
+Côté module infrastucture, pour que le Stub soit pris en charge, il faut ajouter une configuration dans nos tests
+```
+    @TestConfiguration
+    @ComponentScan(
+            basePackages = {"fr.scc.saillie"},
+            includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Stub.class})})
+    static class StubConfiguration {
+    }
+```
+Pour le démarrage de l'application, il faut également préciser la partie Stub
+```
+   @Configuration
+   @ComponentScan(
+         basePackages = {"fr.scc.saillie"},
+         includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {DomainService.class,Stub.class})})
+   public class DomainConfiguration {
+   }
+```
