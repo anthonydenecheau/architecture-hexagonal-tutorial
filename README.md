@@ -131,17 +131,16 @@ Il nous reste à compléter le repository `RaceRepository`et le mapper qui va al
 
 ### branch feature/step7
 
-Avant de compléter les règles métier, arrêtons-nous un moment pour mettre en place la documentation.\
-* module domain
+Avant de compléter les règles métier, arrêtons-nous un moment pour mettre en place la documentation.
+* Java documentation
 ```
 mvn javadoc:javadoc
 ```
-
 La documentation est générée sous chacun des modules sous leur répetoire `target/site/apidocs`.
 
 Références : [Javadoc](https://maven.apache.org/plugins/maven-javadoc-plugin/examples/aggregate.html)
 
-* module infrastructure
+* Swagger
 ```
 http://localhost:1977/swagger-ui/index.html
 ```
