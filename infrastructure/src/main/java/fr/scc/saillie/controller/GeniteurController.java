@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +17,15 @@ import org.springframework.web.server.ResponseStatusException;
 import fr.scc.saillie.dto.GeniteurRequest;
 import fr.scc.saillie.geniteur.api.ValidateGeniteur;
 import fr.scc.saillie.geniteur.error.GeniteurException;
-import jakarta.validation.ConstraintViolationException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "Geniteur", description = "Geniteur  Api")
 @RestController
 public class GeniteurController {
 
@@ -30,6 +35,13 @@ public class GeniteurController {
         this.validateGeniteur = validateGeniteur;
     }
 
+    @Operation(
+      summary = "Validation d'un géniteur",
+      description = "Validation d'un géniteur lors d'une saillie.")
+    @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "successful operation", content = { @Content(schema = @Schema(implementation = ResponseEntity.class), mediaType = "application/json") }),
+      @ApiResponse(responseCode = "400", description = "something's wrong", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "500", description = "something's crashed", content = { @Content(schema = @Schema()) }) })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping("/validateGeniteur")

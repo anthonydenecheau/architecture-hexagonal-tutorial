@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import fr.scc.saillie.config.DomainConfiguration;
 import fr.scc.saillie.ddd.Stub;
-import fr.scc.saillie.geniteur.spi.stubs.RaceInventoryStub;
 
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.DisplayName;

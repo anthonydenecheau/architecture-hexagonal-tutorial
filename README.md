@@ -129,3 +129,19 @@ Nous créons un fichier pour initialiser le schéma (`flywaydb`) via le fichier 
 
 Il nous reste à compléter le repository `RaceRepository`et le mapper qui va alimenter l'objet `Race` du domain.
 
+### branch feature/step7
+
+Avant de compléter les règles métier, arrêtons-nous un moment pour mettre en place la documentation.\
+* module domain
+```
+mvn javadoc:javadoc
+```
+
+La documentation est générée sous chacun des modules sous leur répetoire `target/site/apidocs`.
+
+Références : [Javadoc](https://maven.apache.org/plugins/maven-javadoc-plugin/examples/aggregate.html)
+
+* module infrastructure
+```
+http://localhost:1977/swagger-ui/index.html
+```

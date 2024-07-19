@@ -8,6 +8,11 @@ import fr.scc.saillie.geniteur.error.GeniteurException;
 import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.spi.RaceInventory;
 
+/**
+ * GeniteurUseCase
+ *
+ * @author anthonydenecheau
+ */
 @DomainService
 public class GeniteurUseCase implements ValidateGeniteur {
 
@@ -17,6 +22,14 @@ public class GeniteurUseCase implements ValidateGeniteur {
         this.raceInventory = raceInventory;
     }
 
+    
+    /** 
+     * Validation de l'ensemble des règles métier pour un géniteur impliqué dans une saillie
+     * @param dateSaillie date de saillie
+     * @param geniteur données du géniteur {@link fr.scc.saillie.geniteur.model.Geniteur}
+     * @return String
+     * @throws GeniteurException
+     */
     @Override
     public String execute(LocalDate dateSaillie, Geniteur geniteur) throws GeniteurException {
         if (geniteur.isValidDateNaissance(dateSaillie))
