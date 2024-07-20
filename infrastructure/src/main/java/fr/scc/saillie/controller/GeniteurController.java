@@ -35,6 +35,7 @@ public class GeniteurController {
         this.validateGeniteur = validateGeniteur;
     }
 
+    @PostMapping(path = "/validateGeniteur", produces = "application/json", consumes = "application/json")
     @Operation(
       summary = "Validation d'un géniteur",
       description = "Validation d'un géniteur lors d'une saillie.")
@@ -42,9 +43,6 @@ public class GeniteurController {
       @ApiResponse(responseCode = "200", description = "successful operation", content = { @Content(schema = @Schema(implementation = ResponseEntity.class), mediaType = "application/json") }),
       @ApiResponse(responseCode = "400", description = "something's wrong", content = { @Content(schema = @Schema()) }),
       @ApiResponse(responseCode = "500", description = "something's crashed", content = { @Content(schema = @Schema()) }) })
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-    produces = MediaType.APPLICATION_JSON_VALUE)
-    @RequestMapping("/validateGeniteur")
     public ResponseEntity<?> validate(@Valid @RequestBody GeniteurRequest geniteurRequest, BindingResult result) {
         List<String> details = new ArrayList<>();
         try {
