@@ -2,6 +2,8 @@ package fr.scc.saillie;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,18 +15,22 @@ import org.junit.jupiter.api.Test;
 import fr.scc.saillie.geniteur.GeniteurUseCase;
 import fr.scc.saillie.geniteur.api.ValidateGeniteur;
 import fr.scc.saillie.geniteur.model.Geniteur;
+import fr.scc.saillie.geniteur.model.Message;
 import fr.scc.saillie.geniteur.model.Race;
+import fr.scc.saillie.geniteur.model.SEXE;
 
 public class GeniteurUseCaseTest {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.FRENCH);
     Geniteur geniteur = null;
     Race race;
+    List<Message> messages;
 
     @BeforeEach
     public void setUp() {
-        this.geniteur = new Geniteur(1, LocalDate.parse("01/01/2022", formatter));
+        this.geniteur = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), SEXE.FEMELLE);
         this.race = new Race(56,12);
+        this.messages = new ArrayList<Message>();
     }
     
     @Test
@@ -54,16 +60,14 @@ public class GeniteurUseCaseTest {
     void should_authorize_geniteur() {
         //Given
         LocalDate dateSaillie = LocalDate.parse("01/01/2024", formatter);
-        ValidateGeniteur validateGeniteur = new GeniteurUseCase((a) -> (race));
+        ValidateGeniteur validateGeniteur = new GeniteurUseCase((g) -> (geniteur), (r) -> (race));
         //When
-        String result = null;
         try  {
-            result = validateGeniteur.execute(dateSaillie, this.geniteur);
+            messages = validateGeniteur.execute(dateSaillie, this.geniteur);
         } catch (Exception e) {
-            result = e.getMessage();
         }
         //Then
-        assertThat(result).isEqualTo("Le géniteur est validé");
+        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur est validé");
     }
 
     @Test
@@ -71,56 +75,60 @@ public class GeniteurUseCaseTest {
     void should_not_authorize_geniteur() {
         //Given
         LocalDate dateSaillie = LocalDate.parse("01/01/2021", formatter);
-        ValidateGeniteur validateGeniteur = new GeniteurUseCase((a) -> (race));
+        ValidateGeniteur validateGeniteur = new GeniteurUseCase((g) -> (geniteur), (r) -> (race));
         //When
-        String result = null;
         try {
-            result = validateGeniteur.execute(dateSaillie, this.geniteur);
+            messages = validateGeniteur.execute(dateSaillie, this.geniteur);
         } catch (Exception e) {
-            result = e.getMessage();
         }
-
         //Then
-        assertThat(result).isEqualTo("le géniteur est née avant la saillie");
+        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur est née après la saillie");
     }
 
     @Test
     @DisplayName("Step5")
     void should_not_authorize_age_minimum() {
         //Given
-        //Given
         LocalDate dateSaillie = LocalDate.parse("01/08/2022", formatter);
-        ValidateGeniteur validateGeniteur = new GeniteurUseCase((a) -> (race));
+        ValidateGeniteur validateGeniteur = new GeniteurUseCase((g) -> (geniteur), (r) -> (race));
         //When
-        String result = null;
         try {
-            result = validateGeniteur.execute(dateSaillie, this.geniteur);
+            messages = validateGeniteur.execute(dateSaillie, this.geniteur);
         } catch (Exception e) {
-            result = e.getMessage();
         }
-
         //Then
-        assertThat(result).isEqualTo("le géniteur n'est pas en âge de reproduire");
+        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur n'est pas en âge de reproduire");
     }
 
     @Test
     @DisplayName("Step5")
     void should_authorize_age_minimum() {
         //Given
-        //Given
         LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
-        ValidateGeniteur validateGeniteur = new GeniteurUseCase((a) -> (race));
+        ValidateGeniteur validateGeniteur = new GeniteurUseCase((g) -> (geniteur), (r) -> (race));
         //When
-        String result = null;
         try {
-            result = validateGeniteur.execute(dateSaillie, this.geniteur);
+            messages = validateGeniteur.execute(dateSaillie, this.geniteur);
         } catch (Exception e) {
-            result = e.getMessage();
         }
-
         //Then
-        assertThat(result).isEqualTo("Le géniteur est validé");
+        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur est validé");
     }
 
+    @Test
+    @DisplayName("Step8")
+    void should_not_authorize_sexe() {
+        //Given
+        LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
+        Geniteur geniteurAnoSexe = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), SEXE.MALE);
+        ValidateGeniteur validateGeniteur = new GeniteurUseCase((g) -> (geniteur), (r) -> (race));
+        //When
+        try {
+            messages = validateGeniteur.execute(dateSaillie, geniteurAnoSexe);
+        } catch (Exception e) {
+        }
+        //Then
+        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur n'est pas du bon sexe");
+    }
 
 }

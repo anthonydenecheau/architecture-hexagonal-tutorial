@@ -1,25 +1,28 @@
-package fr.scc.saillie.controller;
+package fr.scc.saillie;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.FileCopyUtils;
 
 import fr.scc.saillie.config.DomainConfiguration;
-import fr.scc.saillie.ddd.Stub;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
+
+import javax.sql.DataSource;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
@@ -27,9 +30,10 @@ import org.junit.jupiter.api.Test;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-@WebMvcTest(GeniteurController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 @Import(DomainConfiguration.class)
-public class GeniteurControllerTest {
+public class GeniteurApplicationITTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,8 +44,14 @@ public class GeniteurControllerTest {
     @Value("classpath:__files/payloads/geniteur-error.json")
     private Resource geniteur_error;
 
+    @Value("classpath:__files/payloads/geniteur-date-naissance.json")
+    private Resource geniteur_date_naissance;
+
+    @Value("classpath:__files/payloads/geniteur-trop-jeune.json")
+    private Resource geniteur_trop_jeune;
+
     @Test
-    @DisplayName("Step4")
+    @DisplayName("Step8")
     public void whenPostRequestAndMissingDateSaillie_thenCorrectReponse() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
                 .content(asString(geniteur_error))
@@ -53,7 +63,19 @@ public class GeniteurControllerTest {
     }
 
     @Test
-    @DisplayName("Step4")
+    @DisplayName("Step8")
+    public void whenPostRequestAndValidGeniteurAndDateNaissanceErreur_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_date_naissance))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur est née après la saillie"))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    }
+
+    @Test
+    @DisplayName("Step8")
     public void whenPostRequestAndValidGeniteurAndAuthorize_thenCorrectReponse() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
                 .content(asString(geniteur_default))
@@ -64,11 +86,27 @@ public class GeniteurControllerTest {
                 ;
     }
 
+    @Test
+    @DisplayName("Step6")
+    public void whenPostRequestAndValidGeniteurAndTropJeune_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_trop_jeune))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur n'est pas en âge de reproduire"))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    }
+
     @TestConfiguration
     @ComponentScan(
-            basePackages = {"fr.scc.saillie.geniteur"},
-            includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Stub.class})})
-    static class StubConfiguration {
+        basePackages = {"fr.scc.saillie.geniteur","fr.scc.saillie.repository"})   
+    static class TestsConfiguration {
+        @Bean
+        public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+            return new JdbcTemplate(dataSource);
+        }
+      
     }
 
     private String asString(Resource resource) {
@@ -79,3 +117,4 @@ public class GeniteurControllerTest {
         }
     }
 }
+

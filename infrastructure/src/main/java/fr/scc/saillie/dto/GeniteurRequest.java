@@ -5,7 +5,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import fr.scc.saillie.geniteur.model.Geniteur;
+import fr.scc.saillie.geniteur.model.SEXE;
 import fr.scc.saillie.validator.CheckDateFormat;
+import fr.scc.saillie.validator.ValueOfEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -16,7 +18,7 @@ import lombok.Getter;
 @Schema(description = "Geniteur request Information")
 public class GeniteurRequest {
 
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY, description = "geniteur Id", example = "123")
+    @Schema(description = "geniteur Id", example = "123")
     Integer id;
 
     @NotNull(message = "La date de saillie doit être renseignée")
@@ -24,14 +26,14 @@ public class GeniteurRequest {
     @Schema(description = "Date de saillie au format jj/mm/aaaa", example = "01/01/2023")
     String dateSaillie;    
 
-    @NotNull(message = "La date de naissance doit être renseignée")
-    @CheckDateFormat(pattern = "dd/MM/yyyy", message = "la date de naissance doit être renseignée au format jj/mm/aaaa")
-    @Schema(description = "Date de naissance au format jj/mm/aaaa", example = "01/01/2021")
-    String dateNaissance;    
+    @NotNull(message = "Le sexe du géniteur doit être précisé")
+    @ValueOfEnum(enumClass = SEXE.class, message = "le sexe du geniteur doit prendre pour valeur MALE ou FEMELLE")    
+    @Schema(description = "Sexe annoncé du géniteur", example = "FEMELLE")
+    String sexe;
 
     public static Geniteur convertToEntity(GeniteurRequest geniteurRequest) {
         return new Geniteur(geniteurRequest.getId()
-            , convertStringToDate(geniteurRequest.getDateNaissance()));
+            , SEXE.valueOf(geniteurRequest.getSexe()));
     }
 
     public static LocalDate convertStringToDate(String date) {

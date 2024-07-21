@@ -144,3 +144,23 @@ Références : [Javadoc](https://maven.apache.org/plugins/maven-javadoc-plugin/e
 ```
 http://localhost:1977/swagger-ui/index.html
 ```
+
+### branch feature/step8
+
+Nous revisons notre stratégie de gestion des anomalies.\
+Le domain doit pouvoir retourner des messages de nature I(nfo), W(arning) ou E(rror).\
+Certaines règles peuvent lever un avertissement ou plusieurs erreurs qu'il faudra présenter au client.\
+L'ensemble des messages sera analysé par l'adapter pour retourner un code 200, 400 ou encore 500.
+
+Selon le sexe du géniteur, les règles sont différentes.\
+Pour plus de commodités, les données du géniteurs sont lues depuis le port server-side `GeniteurInventory`.\
+Cela nous permet de simplifier la construction de l'objet `GeniteurRequest`.\
+Par conséquent, l'envoi de la date de naissance n'est plus nécessaire; elle sera lue par la méthode `byId`.
+
+Une opération de refactoring est effectuée sur nos tests.\
+Nous y intégrons les tests d'intégration sous la classe `GeniteurApplicationITTests`.\
+Cela nous permet de vérifier que l’ensemble des parties de notre application fonctionnent correctement ensemble, que ce soit coté `api` que du côté `spi`.
+
+La classe `GeniteurControllerTest` est donc le test unitaire côté `api`.\
+Les classes `RaceRepositoryTest` et `GeniteurRepositoryTest` sont les tests unitaires côté `spi`.
+

@@ -12,9 +12,9 @@ public interface RaceInventory {
 
     /** 
      * Recherche des informations de la race du géniteur
-     * @param id geniteur
+     * @param id race
      * @return Race
      * @throws GeniteurException dans le cas d'un problème de lecture
      */    
-    Race byGeniteurId(Integer id) throws GeniteurException;
+    Race byId(Integer id) throws GeniteurException;
 }

@@ -35,7 +35,7 @@ public class RaceInventoryStub implements RaceInventory {
     }
 
     @Override
-    public Race byGeniteurId(Integer id) throws GeniteurException {
+    public Race byId(Integer id) throws GeniteurException {
         return race;
     }
     

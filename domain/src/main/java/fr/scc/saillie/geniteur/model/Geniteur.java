@@ -3,14 +3,18 @@ package fr.scc.saillie.geniteur.model;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 /**
  * Classe geniteur
  *
  * @author anthonydenecheau
  */
-public record Geniteur(int id, LocalDate dateNaissance) {
+public record Geniteur(int id, int idRace, LocalDate dateNaissance, SEXE sexe) {
 
+    public Geniteur(int id, SEXE sexe) {
+        this(id, 0, null, sexe);
+    }
     
     /** 
      * <p>Determine si la date de naissance du géniteur est antérieure à la date de saillie</p>
@@ -41,6 +45,5 @@ public record Geniteur(int id, LocalDate dateNaissance) {
      */
     private long getMonthsBetween(LocalDate fromDate, LocalDate toDate) {
         return ChronoUnit.MONTHS.between(YearMonth.from(fromDate), YearMonth.from(toDate));
-
     }
 }

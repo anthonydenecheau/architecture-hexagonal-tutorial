@@ -19,21 +19,19 @@ public class RaceRepository implements RaceInventory {
     }
    
     @Override
-    public Race byGeniteurId(Integer id) throws GeniteurException {
+    public Race byId(Integer id) throws GeniteurException {
         Race race = null;
         String sql = "SELECT r.IDENT_RRACE " +
             " , r.NB_AGE_MINI_CONFIRMATION " +
-            " FROM RRACE r, RCHIEN c " +
-            " WHERE r.IDENT_RRACE = c.IDENT_RRACE " +
-            " AND c.IDENT_RCHIEN = ? "
+            " FROM RRACE r " +
+            " WHERE r.IDENT_RRACE = ? "
             ;
         try {
             race = jdbcTemplate.queryForObject(sql, new RaceMapper(), new Object[]{(Object) id});
         } catch (EmptyResultDataAccessException e) {
-            throw new GeniteurException("Aucune race trouvée pour le chien : " + id, null);
+            throw new GeniteurException("Aucune race trouvée pour le chien : " + id);
         } catch (Exception e) {
-            System.out.println("Error byGeniteurId : " + e.getMessage());
-            return null;
+            throw new GeniteurException("Erreur technique [byGeniteurId] : " + e.getMessage());
         }
         return race;
     }
