@@ -25,9 +25,12 @@ public class GeniteurRepository implements GeniteurInventory {
         String sql = "SELECT c.IDENT_RCHIEN " +
             " , c.IDENT_RRACE " +
             " , TO_CHAR(c.DATE_NAISSANCE,'DD/MM/YYYY') DATE_NAISSANCE " +
+            " , TO_CHAR(c.DATE_DECES,'DD/MM/YYYY') DATE_DECES " +
+            " , y.LIBELLE TYPE_INSCRIPTION " +            
             " , DECODE(c.ON_SEXE_MALE,'O','MALE','FEMELLE') SEXE " +
-            " FROM RCHIEN c " +
-            " WHERE c.IDENT_RCHIEN = ? "
+            " FROM RCHIEN c, TYP_DEMANDE_INSCRI_LOF y " +
+            " WHERE c.IDENT_RCHIEN = ? " +            
+            " AND y.IDENT_TYP_DEMANDE_INSCRI_LOF = c.IDENT_TYP_DEMANDE_INSCRI_LOF "
             ;
         try {
             geniteur = jdbcTemplate.queryForObject(sql, new GeniteurMapper(), new Object[]{(Object) id});

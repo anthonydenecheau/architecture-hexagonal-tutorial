@@ -50,6 +50,15 @@ public class GeniteurApplicationITTests {
     @Value("classpath:__files/payloads/geniteur-trop-jeune.json")
     private Resource geniteur_trop_jeune;
 
+    @Value("classpath:__files/payloads/geniteur-date-deces.json")
+    private Resource geniteur_date_deces;
+
+    @Value("classpath:__files/payloads/geniteur-inscription-provisoire.json")
+    private Resource geniteur_inscription_provisoire;
+
+    @Value("classpath:__files/payloads/geniteur-trop-agee.json")
+    private Resource geniteur_trop_agee;
+
     @Test
     @DisplayName("Step8")
     public void whenPostRequestAndMissingDateSaillie_thenCorrectReponse() throws Exception {
@@ -94,6 +103,42 @@ public class GeniteurApplicationITTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur n'est pas en âge de reproduire"))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    }
+
+    @Test
+    @DisplayName("Step9")
+    public void whenPostRequestAndValidGeniteurAndLiceDeces_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_date_deces))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("la lice est déclarée morte à la date de saillie"))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    }
+
+    @Test
+    @DisplayName("Step9")
+    public void whenPostRequestAndValidGeniteurAndInscriptionProvisoire_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_inscription_provisoire))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur est inscrit à titre provisoire"))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    }
+
+    @Test
+    @DisplayName("Step9")
+    public void whenPostRequestAndValidGeniteurAndTropAgee_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_trop_agee))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("la lice est trop âgée pour reproduire"))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     }

@@ -9,12 +9,6 @@
 mvn clean install -U
 cd infrastructure
 mvn spring-boot:run
-
-curl -v --header "Content-Type: application/json" \
---request POST \
---data '{"id":1,"dateSaillie":null,"dateNaissance":"01/01/2021"}' \
-http://localhost:1977/validateGeniteur
-
 ```
 
 ### branch feature/step1
@@ -164,3 +158,15 @@ Cela nous permet de vérifier que l’ensemble des parties de notre application 
 La classe `GeniteurControllerTest` est donc le test unitaire côté `api`.\
 Les classes `RaceRepositoryTest` et `GeniteurRepositoryTest` sont les tests unitaires côté `spi`.
 
+
+### branch feature/step9
+
+[WIP]\
+Implémentation de nouvelles règles
+
+Refactoring Geniteur Request\
+id > idGeniteur
+
+[TODO]\
+Spi
+* données éleveur/propriétaire

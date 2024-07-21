@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.model.SEXE;
+import fr.scc.saillie.geniteur.model.TYPE_INSCRIPTION;
 
 @Component
 public class GeniteurMapper implements RowMapper<Geniteur> {
@@ -25,9 +26,19 @@ public class GeniteurMapper implements RowMapper<Geniteur> {
         return new Geniteur(
             rs.getInt("IDENT_RCHIEN")
             , rs.getInt("IDENT_RRACE")
-            , LocalDate.parse(rs.getString("DATE_NAISSANCE"), formatter)
+            , ConvertStringToLocalDate(rs.getString("DATE_NAISSANCE"))
+            , ConvertStringToLocalDate(rs.getString("DATE_DECES"))
+            , TYPE_INSCRIPTION.valueOf(rs.getString("TYPE_INSCRIPTION"))
             , SEXE.valueOf(rs.getString("SEXE"))
         );
+    }
+
+    private LocalDate ConvertStringToLocalDate(String val) {
+        try {
+            return LocalDate.parse(val, formatter);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

@@ -9,6 +9,7 @@ import fr.scc.saillie.ddd.Stub;
 import fr.scc.saillie.geniteur.error.GeniteurException;
 import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.model.SEXE;
+import fr.scc.saillie.geniteur.model.TYPE_INSCRIPTION;
 import fr.scc.saillie.geniteur.spi.GeniteurInventory;
 
 @Stub
@@ -36,7 +37,7 @@ public class GeniteurInventoryStub implements GeniteurInventory {
     }
 
     private static Geniteur initialiserGeniteur() throws ParseException {
-        return new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), SEXE.FEMELLE);
+        return new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE);
     }
 
     @Override

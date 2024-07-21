@@ -10,6 +10,8 @@ import fr.scc.saillie.geniteur.error.GeniteurException;
 import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.model.LEVEL;
 import fr.scc.saillie.geniteur.model.Message;
+import fr.scc.saillie.geniteur.model.SEXE;
+import fr.scc.saillie.geniteur.model.TYPE_INSCRIPTION;
 import fr.scc.saillie.geniteur.spi.GeniteurInventory;
 import fr.scc.saillie.geniteur.spi.RaceInventory;
 
@@ -50,15 +52,36 @@ public class GeniteurUseCase implements ValidateGeniteur {
                 messages.add(new Message(LEVEL.ERROR,"910","le géniteur n'est pas du bon sexe"));
                 return messages;
             }
+            
+            // Contrôle la date de décès pour la femelle
+            if (!_g.isAliveWhenSaillieHasBeenDone(dateSaillie)) {
+                messages.add(new Message(LEVEL.ERROR,"940","la lice est déclarée morte à la date de saillie"));
+                return messages;
+            }
+
+            // Contrôle du type d'inscription
+            if (_g.isRegisteredAsProvoisire()) {
+                messages.add(new Message(LEVEL.ERROR,"950","le géniteur est inscrit à titre provisoire"));
+                return messages;
+            }
 
             // Contrôle des dates
-            if (_g.isValidDateNaissance(dateSaillie))
-                if (_g.hasAgeMinimum(dateSaillie, raceInventory.byId(_g.idRace()).ageMinimum()))
-                    messages.add(new Message(LEVEL.INFO,"01","le géniteur est validé"));
-                else
-                    messages.add(new Message(LEVEL.ERROR,"920","le géniteur n'est pas en âge de reproduire"));
-            else 
+            if (!_g.isValidDateNaissance(dateSaillie)) {
                 messages.add(new Message(LEVEL.ERROR,"930","le géniteur est née après la saillie"));
+                return messages;
+            }
+            if (!_g.hasAgeMinimumToReproduce(dateSaillie, raceInventory.byId(_g.idRace()).ageMinimum())) {
+                messages.add(new Message(LEVEL.ERROR,"920","le géniteur n'est pas en âge de reproduire"));
+                return messages;
+            }
+            if (_g.isTooOldToReproduce(dateSaillie)) {
+                messages.add(new Message(LEVEL.ERROR,"960","la lice est trop âgée pour reproduire"));
+                return messages;
+            }
+
+            // Validation OK
+            messages.add(new Message(LEVEL.INFO,"01","le géniteur est validé"));
+
         } catch (Exception e) {
             messages.add(new Message(LEVEL.ERROR,"900",e.getMessage()));
         }

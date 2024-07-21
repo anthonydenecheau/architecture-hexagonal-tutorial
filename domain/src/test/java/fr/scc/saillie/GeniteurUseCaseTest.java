@@ -18,6 +18,7 @@ import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.model.Message;
 import fr.scc.saillie.geniteur.model.Race;
 import fr.scc.saillie.geniteur.model.SEXE;
+import fr.scc.saillie.geniteur.model.TYPE_INSCRIPTION;
 
 public class GeniteurUseCaseTest {
 
@@ -28,7 +29,7 @@ public class GeniteurUseCaseTest {
 
     @BeforeEach
     public void setUp() {
-        this.geniteur = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), SEXE.FEMELLE);
+        this.geniteur = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE);
         this.race = new Race(56,12);
         this.messages = new ArrayList<Message>();
     }
@@ -120,7 +121,7 @@ public class GeniteurUseCaseTest {
     void should_not_authorize_sexe() {
         //Given
         LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
-        Geniteur geniteurAnoSexe = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), SEXE.MALE);
+        Geniteur geniteurAnoSexe = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.MALE);
         ValidateGeniteur validateGeniteur = new GeniteurUseCase((g) -> (geniteur), (r) -> (race));
         //When
         try {
@@ -129,6 +130,57 @@ public class GeniteurUseCaseTest {
         }
         //Then
         assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur n'est pas du bon sexe");
+    }
+
+    @Test
+    @DisplayName("Step9")
+    void should_not_authorize_femelle_deces() {
+        //Given
+        LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
+        Geniteur geniteurRequest = new Geniteur(1, SEXE.FEMELLE);
+        Geniteur geniteurAnoDeces = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), LocalDate.parse("01/07/2024", formatter), TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE);
+        ValidateGeniteur validateGeniteur = new GeniteurUseCase((g) -> (geniteurAnoDeces), (r) -> (race));
+        //When
+        try {
+            messages = validateGeniteur.execute(dateSaillie, geniteurRequest);
+        } catch (Exception e) {
+        }
+        //Then
+        assertThat(messages).extracting(m->m.message()).containsExactly("la lice est déclarée morte à la date de saillie");
+    }
+
+    @Test
+    @DisplayName("Step9")
+    void should_not_authorize_type_inscription() {
+        //Given
+        LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
+        Geniteur geniteurRequest = new Geniteur(1, SEXE.FEMELLE);
+        Geniteur geniteurAnoTypeInscription = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.PROVISOIRE, SEXE.FEMELLE);
+        ValidateGeniteur validateGeniteur = new GeniteurUseCase((g) -> (geniteurAnoTypeInscription), (r) -> (race));
+        //When
+        try {
+            messages = validateGeniteur.execute(dateSaillie, geniteurRequest);
+        } catch (Exception e) {
+        }
+        //Then
+        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur est inscrit à titre provisoire");
+    }
+
+    @Test
+    @DisplayName("Step9")
+    void should_not_authorize_lice_age_maximum() {
+        //Given
+        LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
+        Geniteur geniteurRequest = new Geniteur(1, SEXE.FEMELLE);
+        Geniteur geniteurAnoLiceAgeMax = new Geniteur(1, 56, LocalDate.parse("01/01/2010", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE);
+        ValidateGeniteur validateGeniteur = new GeniteurUseCase((g) -> (geniteurAnoLiceAgeMax), (r) -> (race));
+        //When
+        try {
+            messages = validateGeniteur.execute(dateSaillie, geniteurRequest);
+        } catch (Exception e) {
+        }
+        //Then
+        assertThat(messages).extracting(m->m.message()).containsExactly("la lice est trop âgée pour reproduire");
     }
 
 }
