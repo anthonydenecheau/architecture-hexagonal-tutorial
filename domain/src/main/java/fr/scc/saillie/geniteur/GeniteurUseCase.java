@@ -10,9 +10,8 @@ import fr.scc.saillie.geniteur.error.GeniteurException;
 import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.model.LEVEL;
 import fr.scc.saillie.geniteur.model.Message;
-import fr.scc.saillie.geniteur.model.SEXE;
-import fr.scc.saillie.geniteur.model.TYPE_INSCRIPTION;
 import fr.scc.saillie.geniteur.spi.GeniteurInventory;
+import fr.scc.saillie.geniteur.spi.PersonneInventory;
 import fr.scc.saillie.geniteur.spi.RaceInventory;
 
 /**
@@ -25,8 +24,10 @@ public class GeniteurUseCase implements ValidateGeniteur {
 
     private final RaceInventory raceInventory;
     private final GeniteurInventory geniteurInventory;
+    private final PersonneInventory personneInventory;
 
-    public GeniteurUseCase(GeniteurInventory geniteurInventory, RaceInventory raceInventory) {
+    public GeniteurUseCase(PersonneInventory personneInventory, GeniteurInventory geniteurInventory, RaceInventory raceInventory) {
+        this.personneInventory = personneInventory;
         this.geniteurInventory = geniteurInventory;
         this.raceInventory = raceInventory;
     }

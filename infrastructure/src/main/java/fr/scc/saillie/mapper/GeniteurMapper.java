@@ -30,6 +30,7 @@ public class GeniteurMapper implements RowMapper<Geniteur> {
             , ConvertStringToLocalDate(rs.getString("DATE_DECES"))
             , TYPE_INSCRIPTION.valueOf(rs.getString("TYPE_INSCRIPTION"))
             , SEXE.valueOf(rs.getString("SEXE"))
+            , null
         );
     }
 

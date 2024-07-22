@@ -31,7 +31,7 @@ public class RaceRepository implements RaceInventory {
         } catch (EmptyResultDataAccessException e) {
             throw new GeniteurException("Aucune race trouvée pour le chien : " + id);
         } catch (Exception e) {
-            throw new GeniteurException("Erreur technique [byGeniteurId] : " + e.getMessage());
+            throw new GeniteurException("Erreur technique [byId] : " + e.getMessage());
         }
         return race;
     }

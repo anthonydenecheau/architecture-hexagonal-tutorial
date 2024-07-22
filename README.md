@@ -162,11 +162,9 @@ Les classes `RaceRepositoryTest` et `GeniteurRepositoryTest` sont les tests unit
 ### branch feature/step9
 
 [WIP]\
-Implémentation de nouvelles règles
+Implémentation de nouvelles règles\
+Contrôle de la confirmation
 
-Refactoring Geniteur Request\
-id > idGeniteur
-
-[TODO]\
 Spi
-* données éleveur/propriétaire
+* La classe `PersonneInventory`nous permet d'extraire les informations éleveur/propriétaire.\
+La méthode `byId` accepte selon que nous recherchons un eleveur, l'`idEleveur` de l'objet `GeniteurRequest` et l'`id` de l'objet `Geniteur` pour la lecture du propriétaire.

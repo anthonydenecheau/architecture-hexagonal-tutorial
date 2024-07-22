@@ -1,5 +1,6 @@
 {
     "id": 2, 
+    "idEleveur" : 1,
     "dateSaillie" : "01/01/2021",
     "sexe" : "FEMELLE" 
 }

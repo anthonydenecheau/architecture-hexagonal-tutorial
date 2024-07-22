@@ -29,7 +29,7 @@ public class GeniteurRepositoryTest {
         //Given
         Integer idGeniteur = 1;
         //When
-        Geniteur geniteur = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE);
+        Geniteur geniteur = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null);
         //Then
         assertThat(geniteurRepository.byId(idGeniteur)).isEqualTo(geniteur);
     }    

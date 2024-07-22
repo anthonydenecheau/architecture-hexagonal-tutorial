@@ -21,6 +21,10 @@ public class GeniteurRequest {
     @Schema(description = "geniteur Id", example = "123")
     Integer id;
 
+    @NotNull(message = "L'éleveur doit être renseigné")
+    @Schema(description = "eleveur id", example = "301")
+    Integer idEleveur;    
+
     @NotNull(message = "La date de saillie doit être renseignée")
     @CheckDateFormat(pattern = "dd/MM/yyyy", message = "la date de saillie doit être renseignée au format jj/mm/aaaa")
     @Schema(description = "Date de saillie au format jj/mm/aaaa", example = "01/01/2023")
