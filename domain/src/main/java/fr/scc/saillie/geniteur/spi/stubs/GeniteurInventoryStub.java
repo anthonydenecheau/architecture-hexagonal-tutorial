@@ -1,5 +1,7 @@
 package fr.scc.saillie.geniteur.spi.stubs;
 
+import static java.util.Arrays.asList;
+
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -45,7 +47,8 @@ public class GeniteurInventoryStub implements GeniteurInventory {
             null, 
             TYPE_INSCRIPTION.DESCENDANCE, 
             SEXE.FEMELLE, 
-            new Confirmation(202000001, 1235, LocalDate.parse("01/02/2023", formatter), true, false, false)
+            new Confirmation(202000001, 1235, LocalDate.parse("01/02/2023", formatter), true, false, false),
+            asList()
         );
     }
 

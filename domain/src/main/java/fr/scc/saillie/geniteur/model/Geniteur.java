@@ -3,16 +3,21 @@ package fr.scc.saillie.geniteur.model;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 /**
  * Classe geniteur
  *
  * @author anthonydenecheau
  */
-public record Geniteur(int id, int idRace, LocalDate dateNaissance , LocalDate dateDeces, TYPE_INSCRIPTION typeInscription, SEXE sexe, Confirmation confirmation) {
+public record Geniteur(int id, int idRace, LocalDate dateNaissance , LocalDate dateDeces, TYPE_INSCRIPTION typeInscription, SEXE sexe, Confirmation confirmation, List<Litige> litiges) {
 
     public Geniteur(int id, SEXE sexe) {
-        this(id, 0, null, null, null, sexe, null);
+        this(id, 0, null, null, null, sexe, null, null);
+    }
+
+    public Geniteur withConfirmation(Confirmation confirmation) {
+        return new Geniteur(id(), idRace(), dateNaissance(), dateDeces(), typeInscription(), sexe(), confirmation, litiges());
     }
 
     private static final int MAX_AGE_LICE_POUR_SAILLIE_EN_ANNEES = 9;
@@ -75,6 +80,31 @@ public record Geniteur(int id, int idRace, LocalDate dateNaissance , LocalDate d
     }
 
     /** 
+     * <p>le géniteur est confirmé</p>
+     * @param eleveur données de l'éleveur (saillie)
+     * @param proprietaire données du propriétaire (géniteur)
+     * @return boolean
+     */
+    public boolean isExceptionConfirme(LocalDate dateSaillie, Personne eleveur, Personne proprietaire) {
+    
+        // le géniteur est une femelle et que l'éleveur déclarant réside dans les DOMTOM ou à l'étranger 
+        if (SEXE.FEMELLE.equals(sexe()) && (eleveur.isResidantDOMTOM() || eleveur.isResidantEtranger())) {
+            return true;
+        }
+        // le géniteur est un mâle et que le propriétaire réside dans les DOMTOM ou à l'étanger
+        if (SEXE.MALE.equals(sexe()) && (proprietaire.isResidantDOMTOM() || proprietaire.isResidantEtranger()))
+            return true;
+        // le géniteur est inscrit au titre du LIVRE D'ATTENTE
+        if (TYPE_INSCRIPTION.LIVRE_ATTENTE.equals(typeInscription()))
+            return true; 
+        // le géniteur est un mâle et inscrit  au titre du LIVRE ETRANGER
+        if (SEXE.MALE.equals(sexe()) && TYPE_INSCRIPTION.ETRANGER.equals(typeInscription))
+            return true;
+            
+        return false;
+    }
+
+    /** 
      * <p>le nombre de mois séparant 2 dates</p>
      * @param fromDate
      * @param toDate
@@ -83,4 +113,20 @@ public record Geniteur(int id, int idRace, LocalDate dateNaissance , LocalDate d
     private long getMonthsBetween(LocalDate fromDate, LocalDate toDate) {
         return ChronoUnit.MONTHS.between(YearMonth.from(fromDate), YearMonth.from(toDate));
     }
+
+    /** 
+     * <p>Présence de litiges à la date de saillie ou litige ouvert</p>
+     * @param  dateSaillie date de saillie
+     * @return boolean
+     */
+    public boolean hasLitige(LocalDate dateSaillie) {
+        if (this.litiges == null)
+            return false;
+
+        return this.litiges.stream()
+                .anyMatch(litige -> litige.dateOuverture().isBefore(dateSaillie)
+                        && ( litige.dateFermeture().isAfter(dateSaillie) || litige.dateFermeture() == null) );
+
+    }
+
 }

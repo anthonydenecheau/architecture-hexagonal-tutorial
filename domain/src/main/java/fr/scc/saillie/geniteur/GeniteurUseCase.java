@@ -10,6 +10,8 @@ import fr.scc.saillie.geniteur.error.GeniteurException;
 import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.model.LEVEL;
 import fr.scc.saillie.geniteur.model.Message;
+import fr.scc.saillie.geniteur.model.PROFIL;
+import fr.scc.saillie.geniteur.model.Personne;
 import fr.scc.saillie.geniteur.spi.GeniteurInventory;
 import fr.scc.saillie.geniteur.spi.PersonneInventory;
 import fr.scc.saillie.geniteur.spi.RaceInventory;
@@ -40,11 +42,19 @@ public class GeniteurUseCase implements ValidateGeniteur {
      * @throws GeniteurException
      */
     @Override
-    public List<Message> execute(LocalDate dateSaillie, Geniteur geniteur) throws GeniteurException {
+    public List<Message> execute(int idEleveur, LocalDate dateSaillie, Geniteur geniteur) throws GeniteurException {
         
         List<Message> messages = new ArrayList<Message>();
         
         try {
+
+            // Lecture des litiges sur l'éleveur
+            Personne eleveur = personneInventory.byId(idEleveur, PROFIL.ELEVEUR);
+            if (eleveur.hasLitige(dateSaillie)) {
+                messages.add(new Message(LEVEL.ERROR,"971","l'éleveur a un litige"));
+                return messages;
+            }
+
             // Lecture des informations du géniteur
             Geniteur _g = geniteurInventory.byId(geniteur.id());
 
@@ -77,6 +87,39 @@ public class GeniteurUseCase implements ValidateGeniteur {
             }
             if (_g.isTooOldToReproduce(dateSaillie)) {
                 messages.add(new Message(LEVEL.ERROR,"960","la lice est trop âgée pour reproduire"));
+                return messages;
+            }
+
+            // Contrôle des litiges s/ le propriétaire
+            Personne proprietaire = personneInventory.byId(_g.id(), PROFIL.PROPRIETAIRE);
+            if (proprietaire.hasLitige(dateSaillie)) {
+                messages.add(new Message(LEVEL.ERROR,"975","le propriétaire du géniteur a un litige"));
+                return messages;
+            }    
+
+            // Contrôle des litiges s/ le géniteur
+            if (_g.hasLitige(dateSaillie)) {
+                messages.add(new Message(LEVEL.ERROR,"972","le géniteur possède des litiges"));
+                return messages;
+            }
+
+            // Lecture des information de la confirmation
+            if (_g.confirmation() != null) {
+                // le chien est en appel de sa confirmation
+                if (_g.confirmation().numDossier() > 0 && _g.confirmation().isOnAppel()) {
+                    messages.add(new Message(LEVEL.ERROR,"973","le géniteur a un appel sur la confirmation"));
+                    return messages;
+                }
+                // un dossier de confirmation a été initié mais le chien a été ajourné ou déclaré inapte
+                if (_g.confirmation().numDossier() > 0 && (_g.confirmation().isAjourne() || !_g.confirmation().isConfirme())) {
+                    messages.add(new Message(LEVEL.ERROR,"974","le géniteur a été ajourné ou déclaré inapte à la confirmation"));
+                    return messages;
+                }
+            }            
+
+            // Le géniteur n'est pas confirmé ici == exception pour le géniteur non confirmé
+            if (_g.confirmation() == null && !_g.isExceptionConfirme(dateSaillie, eleveur, proprietaire)) {
+                messages.add(new Message(LEVEL.ERROR,"970","le géniteur n'est pas confirmé"));
                 return messages;
             }
 
