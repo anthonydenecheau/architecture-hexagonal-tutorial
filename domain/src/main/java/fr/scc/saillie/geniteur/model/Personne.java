@@ -28,6 +28,10 @@ public class Personne {
         this.litiges = litiges;
     }
 
+    public int getId() {
+        return id;
+    }
+    
     public void withLitiges(List<Litige> litiges) {
         this.litiges = litiges;
     }

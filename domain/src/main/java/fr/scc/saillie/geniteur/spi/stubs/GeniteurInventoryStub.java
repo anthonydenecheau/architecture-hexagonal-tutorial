@@ -50,6 +50,8 @@ public class GeniteurInventoryStub implements GeniteurInventory {
             , new Confirmation(202000001, 1235, LocalDate.parse("01/02/2023", formatter), true, false, false)
             , asList()
             , asList()
+            , true
+            , true
         );
     }
 

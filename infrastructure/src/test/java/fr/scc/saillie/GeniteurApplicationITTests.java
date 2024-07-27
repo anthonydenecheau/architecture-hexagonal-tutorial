@@ -65,6 +65,15 @@ public class GeniteurApplicationITTests {
     @Value("classpath:__files/payloads/geniteur-lice-saillie.json")
     private Resource geniteur_lice_saillie;
 
+    @Value("classpath:__files/payloads/geniteur-lice-litige.json")
+    private Resource geniteur_lice_litige;
+
+    @Value("classpath:__files/payloads/geniteur-confirmation-appel.json")
+    private Resource geniteur_confirmation_appel;
+
+    @Value("classpath:__files/payloads/geniteur-confirmation-inapte.json")
+    private Resource geniteur_confirmation_inapte;
+
     @Test
     @DisplayName("Step8")
     public void whenPostRequestAndMissingDateSaillie_thenCorrectReponse() throws Exception {
@@ -172,6 +181,42 @@ public class GeniteurApplicationITTests {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     }    
+
+    @Test
+    @DisplayName("Step9")
+    public void whenPostRequestAndValidLiceLitige_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_lice_litige))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur possède des litiges"))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    } 
+
+    @Test
+    @DisplayName("Step9")
+    public void whenPostRequestAndValidConfirmationAppel_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_confirmation_appel))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur a un appel sur la confirmation"))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    }     
+
+    @Test
+    @DisplayName("Step9")
+    public void whenPostRequestAndValidConfirmationInapte_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_confirmation_inapte))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur a été ajourné ou déclaré inapte à la confirmation"))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    } 
 
     @TestConfiguration
     @ComponentScan(

@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -22,9 +21,11 @@ public class Geniteur  {
     Confirmation confirmation;
     List<Litige> litiges;
     List<Portee> portees;
+    boolean genealogieComplete;
+    boolean empreinteAdn;
 
     public Geniteur(int id, int idRace, LocalDate dateNaissance, LocalDate dateDeces, TYPE_INSCRIPTION typeInscription,
-    SEXE sexe, Confirmation confirmation, List<Litige> litiges, List<Portee> portees) {
+      SEXE sexe, Confirmation confirmation, List<Litige> litiges, List<Portee> portees, boolean genealogieComplete, boolean empreinteAdn) {
         this.id = id;
         this.idRace = idRace;
         this.dateNaissance = dateNaissance;
@@ -34,6 +35,8 @@ public class Geniteur  {
         this.confirmation = confirmation;
         this.litiges = litiges;
         this.portees = portees;
+        this.genealogieComplete = genealogieComplete;
+        this.empreinteAdn = empreinteAdn;
     }
 
     public Geniteur(int id, SEXE sexe) {
@@ -47,6 +50,10 @@ public class Geniteur  {
 
     public void withPortees(List<Portee> portees) {
         this.portees = portees;
+    }
+
+    public void withLitiges(List<Litige> litiges) {
+        this.litiges = litiges;
     }
 
     public int getId() {
@@ -63,6 +70,22 @@ public class Geniteur  {
 
     public Confirmation getConfirmation() {
         return confirmation;
+    }
+
+    public boolean isGenealogieComplete() {
+        return genealogieComplete;
+    }
+
+    public void setGenealogieComplete(boolean genealogieComplete) {
+        this.genealogieComplete = genealogieComplete;
+    }
+
+    public boolean isEmpreinteAdn() {
+        return empreinteAdn;
+    }
+
+    public void setEmpreinteAdn(boolean empreinteAdn) {
+        this.empreinteAdn = empreinteAdn;
     }
 
     private static final int MAX_AGE_LICE_POUR_SAILLIE_EN_ANNEES = 9;
@@ -251,6 +274,8 @@ public class Geniteur  {
         result = prime * result + ((confirmation == null) ? 0 : confirmation.hashCode());
         result = prime * result + ((litiges == null) ? 0 : litiges.hashCode());
         result = prime * result + ((portees == null) ? 0 : portees.hashCode());
+        result = prime * result + (genealogieComplete ? 1231 : 1237);
+        result = prime * result + (empreinteAdn ? 1231 : 1237);
         return result;
     }
 
@@ -296,7 +321,12 @@ public class Geniteur  {
                 return false;
         } else if (!portees.equals(other.portees))
             return false;
+        if (genealogieComplete != other.genealogieComplete)
+            return false;
+        if (empreinteAdn != other.empreinteAdn)
+            return false;
         return true;
     }
 
+    
 }

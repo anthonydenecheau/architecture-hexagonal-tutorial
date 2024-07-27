@@ -269,7 +269,7 @@ Résumé des règles implémentées.
   * GeniteurUseCaseTest
       - should_not_authorize_geniteur_litiges
   * GeniteurApplicationITTests
-      - [TODO]
+      - whenPostRequestAndValidLiceLitige_thenCorrectReponse
 * Contrôle des information de la confirmation
   * le chien s'est présenté à une séance de confirmation mais le chien est en appel de sa confirmation
     - GeniteurUseCase
@@ -279,7 +279,7 @@ Résumé des règles implémentées.
     - GeniteurUseCaseTest
         - should_not_authorize_appel_confirmation
     - GeniteurApplicationITTests
-        - [TODO]
+        - whenPostRequestAndValidConfirmationAppel_thenCorrectReponse
   * le chien s'est présenté à une séance de confirmation mais le chien est ajourné ou inapte
     - GeniteurUseCase
         - Level : Error
@@ -288,28 +288,41 @@ Résumé des règles implémentées.
     - GeniteurUseCaseTest
         - should_not_authorize_ajourne_confirmation
     - GeniteurApplicationITTests
-        - [TODO]
+        - whenPostRequestAndValidConfirmationInapte_thenCorrectReponse
   * le chien ne s'est jamais présenté à une séance de confirmation et ne répond à aucune des règles d'exception
     - GeniteurUseCase
         - Level : Error
         - Code : 970
         - Message : le géniteur n'est pas confirmé
     - GeniteurUseCaseTest
-        - should_not_authorize_confirmation
+        - should_not_authorize_confirmation        
     - GeniteurApplicationITTests
-        - [TODO]
+        - [TODO]  
+  * le chien ne s'est jamais présenté à une séance de confirmation et répond à une exception 
+    - GeniteurUseCase
+        - Level : Info
+        - Code : 01
+        - Message : le géniteur est validé
+    - GeniteurUseCaseTest
+        - should_authorize_exception_confirmation        
+    - GeniteurApplicationITTests
+        - [TODO] 
 * Contrôle de l'enregistrement d'une généalogie complète
   * GeniteurUseCase
-      - [TODO]
+        - Level : Error
+        - Code : 979
+        - Message : la généalogie du géniteur n'est pas complète sur 3 générations
   * GeniteurUseCaseTest
-      - [TODO]
+      - should_not_authorize_genealogie_complete
   * GeniteurApplicationITTests
       - [TODO]
 * Contrôle de l'enregistrement empreinte ADN
   * GeniteurUseCase
-      - [TODO]
+        - Level : Error
+        - Code : 980
+        - Message : l'empreinte ADN du géniteur n'est pas enregistrée
   * GeniteurUseCaseTest
-      - [TODO]
+      - should_not_authorize_empreinte_adn
   * GeniteurApplicationITTests
       - [TODO]
 

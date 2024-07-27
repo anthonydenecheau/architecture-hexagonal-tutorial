@@ -39,7 +39,7 @@ public class GeniteurUseCaseTest {
     public void setUp() {
         this.idEleveur = 1;
         Confirmation confirmation = new Confirmation(202300001, 1, LocalDate.parse("01/01/2023", formatter), true, false, false);
-        this.geniteur = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, confirmation, null, null);
+        this.geniteur = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, confirmation, null, null, true, true);
         this.race = new Race(56,12);
         this.personne = new Personne(1,"44", "FRANCE", null);
         this.messages = new ArrayList<Message>();
@@ -132,7 +132,7 @@ public class GeniteurUseCaseTest {
     void should_not_authorize_sexe() {
         //Given
         LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
-        Geniteur geniteurAnoSexe = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.MALE, null, null, null);
+        Geniteur geniteurAnoSexe = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.MALE, null, null, null, true, true);
         ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (personne), (g) -> (geniteur), (r) -> (race));
         //When
         try {
@@ -149,7 +149,7 @@ public class GeniteurUseCaseTest {
         //Given
         LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
         Geniteur geniteurRequest = new Geniteur(1, SEXE.FEMELLE);
-        Geniteur geniteurAnoDeces = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), LocalDate.parse("01/07/2024", formatter), TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, null);
+        Geniteur geniteurAnoDeces = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), LocalDate.parse("01/07/2024", formatter), TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, null, true, true);
         ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (personne), (g) -> (geniteurAnoDeces), (r) -> (race));
         //When
         try {
@@ -166,7 +166,7 @@ public class GeniteurUseCaseTest {
         //Given
         LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
         Geniteur geniteurRequest = new Geniteur(1, SEXE.FEMELLE);
-        Geniteur geniteurAnoTypeInscription = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.PROVISOIRE, SEXE.FEMELLE, null, null, null);
+        Geniteur geniteurAnoTypeInscription = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.PROVISOIRE, SEXE.FEMELLE, null, null, null, true, true);
         ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (personne), (g) -> (geniteurAnoTypeInscription), (r) -> (race));
         //When
         try {
@@ -183,7 +183,7 @@ public class GeniteurUseCaseTest {
         //Given
         LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
         Geniteur geniteurRequest = new Geniteur(1, SEXE.FEMELLE);
-        Geniteur geniteurAnoLiceAgeMax = new Geniteur(1, 56, LocalDate.parse("01/01/2010", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, null);
+        Geniteur geniteurAnoLiceAgeMax = new Geniteur(1, 56, LocalDate.parse("01/01/2010", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, null, true, true);
         ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (personne), (g) -> (geniteurAnoLiceAgeMax), (r) -> (race));
         //When
         try {
@@ -223,7 +223,7 @@ public class GeniteurUseCaseTest {
         Geniteur geniteurRequest = new Geniteur(1, SEXE.FEMELLE);
         List<Litige> litiges = asList(
             new Litige("absence de règlement", LocalDate.parse("01/01/2023", formatter), LocalDate.parse("01/06/2024", formatter)));
-        Geniteur geniteurAnoLitiges = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, litiges, null);
+        Geniteur geniteurAnoLitiges = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, litiges, null, true, true);
         ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (personne), (g) -> (geniteurAnoLitiges), (r) -> (race));
         //When
         try {
@@ -240,7 +240,7 @@ public class GeniteurUseCaseTest {
         //Given
         LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
         Geniteur geniteurRequest = new Geniteur(1, SEXE.FEMELLE);
-        Geniteur geniteurNonConfirmation = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, null);
+        Geniteur geniteurNonConfirmation = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, null, true, true);
         Personne _personne = new Personne(1, "977", "GUADELOUPE", null);
 
         ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (_personne), (g) -> (geniteurNonConfirmation), (r) -> (race));
@@ -260,7 +260,7 @@ public class GeniteurUseCaseTest {
         LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
         Geniteur geniteurRequest = new Geniteur(1, SEXE.FEMELLE);
         Confirmation confirmation = new Confirmation(202300001, 1, LocalDate.parse("01/01/2023", formatter), false, true, false);
-        Geniteur geniteurAnoConfirmation = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, confirmation, null, null);
+        Geniteur geniteurAnoConfirmation = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, confirmation, null, null, true, true);
         ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (personne), (g) -> (geniteurAnoConfirmation), (r) -> (race));
         //When
         try {
@@ -278,7 +278,7 @@ public class GeniteurUseCaseTest {
         LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
         Geniteur geniteurRequest = new Geniteur(1, SEXE.FEMELLE);
         Confirmation confirmation = new Confirmation(202300001, 1, LocalDate.parse("01/01/2023", formatter), false, false, true);
-        Geniteur geniteurAnoConfirmation = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, confirmation, null, null);
+        Geniteur geniteurAnoConfirmation = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, confirmation, null, null, true, true);
         ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (personne), (g) -> (geniteurAnoConfirmation), (r) -> (race));
         //When
         try {
@@ -295,7 +295,7 @@ public class GeniteurUseCaseTest {
         //Given
         LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
         Geniteur geniteurRequest = new Geniteur(1, SEXE.FEMELLE);
-        Geniteur geniteurConfirmation = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, null);
+        Geniteur geniteurConfirmation = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, null, true, true);
         ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (personne), (g) -> (geniteurConfirmation), (r) -> (race));
         //When
         try {
@@ -317,7 +317,7 @@ public class GeniteurUseCaseTest {
             , new Portee(20230002, TYPE_STATUT_DOSSIER.DS_FORCLOS, LocalDate.parse("01/11/2023", formatter))
             , new Portee(20230001, TYPE_STATUT_DOSSIER.DI_SAISIE, LocalDate.parse("01/01/2023", formatter))
         );
-        Geniteur geniteurAnoSaillieLice = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, portees);
+        Geniteur geniteurAnoSaillieLice = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, portees, true, true);
         ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (personne), (g) -> (geniteurAnoSaillieLice), (r) -> (race));
         //When
         try {
@@ -344,7 +344,7 @@ public class GeniteurUseCaseTest {
             , new Portee(20230002, TYPE_STATUT_DOSSIER.DI_SAISIE, LocalDate.parse("01/12/2022", formatter))
             , new Portee(20230001, TYPE_STATUT_DOSSIER.DI_SAISIE, LocalDate.parse("01/11/2022", formatter))
         );
-        Geniteur geniteurAnoSaillieLicePortees = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, portees);
+        Geniteur geniteurAnoSaillieLicePortees = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, portees, true, true);
         ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (personne), (g) -> (geniteurAnoSaillieLicePortees), (r) -> (race));
         //When
         try {
@@ -370,7 +370,7 @@ public class GeniteurUseCaseTest {
             , new Portee(20230003, TYPE_STATUT_DOSSIER.DI_SAISIE, LocalDate.parse("01/01/2023", formatter))
             , new Portee(20230002, TYPE_STATUT_DOSSIER.DI_SAISIE, LocalDate.parse("01/12/2022", formatter))
         );
-        Geniteur geniteurAnoSaillieLicePortees = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, portees);
+        Geniteur geniteurAnoSaillieLicePortees = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, portees, true, true);
         ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (personne), (g) -> (geniteurAnoSaillieLicePortees), (r) -> (race));
         //When
         try {
@@ -379,6 +379,44 @@ public class GeniteurUseCaseTest {
         }
         //Then
         assertThat(messages).extracting(m->m.message()).containsAnyOf("la portée sera la 8ème portée, ce sera donc la dernière portée pour la lice");
+    }
+
+    @Test
+    @DisplayName("Step9")
+    void should_not_authorize_genealogie_complete() {
+        //Given
+        LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
+        Geniteur geniteurRequest = new Geniteur(1, SEXE.FEMELLE);
+        Geniteur geniteurGenealogieIncomplete = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, null, false, true);
+        Personne _personne = new Personne(1, "977", "GUADELOUPE", null);
+
+        ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (_personne), (g) -> (geniteurGenealogieIncomplete), (r) -> (race));
+        //When
+        try {
+            messages = validateGeniteur.execute(idEleveur, dateSaillie, geniteurRequest);
+        } catch (Exception e) {
+        }
+        //Then
+        assertThat(messages).extracting(m->m.message()).containsExactly("la généalogie du géniteur n'est pas complète sur 3 générations");
+    }
+
+    @Test
+    @DisplayName("Step9")
+    void should_not_authorize_empreinte_adn() {
+        //Given
+        LocalDate dateSaillie = LocalDate.parse("01/08/2024", formatter);
+        Geniteur geniteurRequest = new Geniteur(1, SEXE.FEMELLE);
+        Geniteur geniteurGenealogieEmpreinteAdn = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null, null, null, true, false);
+        Personne _personne = new Personne(1, "977", "GUADELOUPE", null);
+
+        ValidateGeniteur validateGeniteur = new GeniteurUseCase((p, r) -> (_personne), (g) -> (geniteurGenealogieEmpreinteAdn), (r) -> (race));
+        //When
+        try {
+            messages = validateGeniteur.execute(idEleveur, dateSaillie, geniteurRequest);
+        } catch (Exception e) {
+        }
+        //Then
+        assertThat(messages).extracting(m->m.message()).containsExactly("l'empreinte ADN du géniteur n'est pas enregistrée");
     }
 
 }

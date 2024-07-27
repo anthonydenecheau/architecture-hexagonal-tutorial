@@ -109,7 +109,7 @@ public class GeniteurUseCase implements ValidateGeniteur {
 
             // Contrôle des litiges s/ le propriétaire
             Personne proprietaire = personneInventory.byId(_g.getId(), PROFIL.PROPRIETAIRE);
-            if (proprietaire.hasLitige(dateSaillie)) {
+            if (proprietaire != null && proprietaire.hasLitige(dateSaillie)) {
                 messages.add(new Message(LEVEL.ERROR,"976","le propriétaire du géniteur a un litige"));
                 return messages;
             }    
@@ -140,6 +140,18 @@ public class GeniteurUseCase implements ValidateGeniteur {
                 return messages;
             }
 
+            // Controle que la généalogie du géniteur est complète sur 3 générations
+            if (!_g.isGenealogieComplete()) {
+                messages.add(new Message(LEVEL.ERROR,"979","la généalogie du géniteur n'est pas complète sur 3 générations"));
+                return messages;
+            }
+
+            // Controle que l'empreinte ADN du géniteur est enregistrée
+            if (!_g.isEmpreinteAdn()) {
+                messages.add(new Message(LEVEL.ERROR,"980","l'empreinte ADN du géniteur n'est pas enregistrée"));
+                return messages;
+            }
+            
             // Validation OK
             messages.add(new Message(LEVEL.INFO,"01","le géniteur est validé"));
 

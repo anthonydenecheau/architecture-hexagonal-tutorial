@@ -40,6 +40,8 @@ public class GeniteurMapper implements RowMapper<Geniteur> {
                 , (rs.getString("ON_AJOURNE_CONFIRMATION").equals("O") ? true : false))
             , null
             , null
+            , true
+            , true
         );
     }
 

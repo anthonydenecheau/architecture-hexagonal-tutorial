@@ -50,20 +50,22 @@ public class PersonneRepository implements PersonneInventory {
         try {
             if (profil.equals(PROFIL.ELEVEUR)) {
                 personne = jdbcTemplate.queryForObject(sqlEleveur, new PersonneMapper(), new Object[]{(Object) id});
-                personne.withLitiges(lireLitigesById(id));
+                personne.withLitiges(lireLitigesEleveurById(id));
             }
-            if (profil.equals(PROFIL.PROPRIETAIRE))
+            if (profil.equals(PROFIL.PROPRIETAIRE)) {
                 personne = jdbcTemplate.queryForObject(sqlProprietaire, new PersonneMapper(), new Object[]{(Object) id});
-            
+                personne.withLitiges(lireLitigesPersonneById(personne.getId()));
+            }
         } catch (EmptyResultDataAccessException e) {
-            throw new GeniteurException("Aucune personne trouvée pour : " + id);
+            if (!profil.equals(PROFIL.PROPRIETAIRE))
+                throw new GeniteurException("Aucune personne trouvée pour : " + id);
         } catch (Exception e) {
             throw new GeniteurException("Erreur technique [byId] : " + e.getMessage());
         }
         return personne;
     }
 
-    private List<Litige> lireLitigesById (int id) throws GeniteurException {
+    private List<Litige> lireLitigesEleveurById (int id) throws GeniteurException {
         List<Litige> litiges = new ArrayList<Litige>();
         
         String sqlLitiges = "SELECT IDENT_TYP_LITIGE_ELEV MOTIF" +
@@ -75,8 +77,26 @@ public class PersonneRepository implements PersonneInventory {
         try {
             litiges = jdbcTemplate.query(sqlLitiges, new LitigeMapper(), new Object[]{(Object) id});
         } catch (Exception e) {
-            throw new GeniteurException("Erreur technique [lireLitigesById] : " + e.getMessage());
+            throw new GeniteurException("Erreur technique [lireLitigesEleveurById] : " + e.getMessage());
         }
         return litiges;
     }
+
+    private List<Litige> lireLitigesPersonneById (int id) throws GeniteurException {
+        List<Litige> litiges = new ArrayList<Litige>();
+        
+        String sqlLitiges = "SELECT IDENT_TYP_LITIGE_PERS MOTIF" +
+        " , TO_CHAR(DATE_OUVERTURE,'DD/MM/YYYY') DATE_OUVERTURE " +
+        " , TO_CHAR(DATE_FERMETURE,'DD/MM/YYYY') DATE_FERMETURE " +
+        " FROM RPERSONNE_LITIGE " +
+        " WHERE IDENT_RPERSONNE = ? "
+        ;
+        try {
+            litiges = jdbcTemplate.query(sqlLitiges, new LitigeMapper(), new Object[]{(Object) id});
+        } catch (Exception e) {
+            throw new GeniteurException("Erreur technique [lireLitigesPersonneById] : " + e.getMessage());
+        }
+        return litiges;
+    }
+
 }
