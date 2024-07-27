@@ -8,14 +8,28 @@ import java.util.List;
  *
  * @author anthonydenecheau
  */
-public record Personne(int id, String departement, String pays, List<Litige> litiges) {
+public class Personne {
+
+    int id;
+    String departement;
+    String pays;
+    List<Litige> litiges;
 
     public Personne(int id, String departement, String pays) {
-        this(id, departement, pays, null);
+        this.id = id;
+        this.departement = departement;
+        this.pays = pays;
     }
 
-    public Personne withLitiges(List<Litige> litiges) {
-        return new Personne(id(), departement(), pays(), litiges);
+    public Personne(int id, String departement, String pays, List<Litige> litiges) {
+        this.id = id;
+        this.departement = departement;
+        this.pays = pays;
+        this.litiges = litiges;
+    }
+
+    public void withLitiges(List<Litige> litiges) {
+        this.litiges = litiges;
     }
 
     /** 
@@ -24,12 +38,12 @@ public record Personne(int id, String departement, String pays, List<Litige> lit
      * @return boolean
      */
     public boolean hasLitige(LocalDate dateSaillie) {
-        if (this.litiges == null)
+        if (this.litiges == null || this.litiges.isEmpty())
             return false;
 
         return this.litiges.stream()
                 .anyMatch(litige -> litige.dateOuverture().isBefore(dateSaillie)
-                        && ( litige.dateFermeture().isAfter(dateSaillie) || litige.dateFermeture() == null) );
+                        && ( (litige.dateFermeture() == null ? true : litige.dateFermeture().isAfter(dateSaillie)) ) );
 
     }    
 
@@ -39,15 +53,15 @@ public record Personne(int id, String departement, String pays, List<Litige> lit
      */
     public boolean isResidantDOMTOM () {
         // Note: le département 0 est un département fictif associé aux anciennes colonies
-        if ( pays().equals("FRANCE") 
-            && (departement().equals("0")
-                || (Integer.parseInt(departement()) >= 97 && Integer.parseInt(departement()) >= 99 ))) {
+        if ( this.pays.equals("FRANCE") 
+            && (this.departement.equals("0")
+                || (Integer.parseInt(this.departement) >= 97 && Integer.parseInt(this.departement) >= 99 ))) {
             return true;
         }
-        return pays().equals("GUADELOUPE")
-            || pays().equals("MARTINIQUE")
-            || pays().equals("REUNION")
-            || pays().equals("POLYNESIE FRANCAISE")
+        return this.pays.equals("GUADELOUPE")
+            || this.pays.equals("MARTINIQUE")
+            || this.pays.equals("REUNION")
+            || this.pays.equals("POLYNESIE FRANCAISE")
             ;
 
     }
@@ -57,11 +71,45 @@ public record Personne(int id, String departement, String pays, List<Litige> lit
      * @return boolean
      */
     public boolean isResidantEtranger () {
-        return !pays().equals("FRANCE") 
-            && !pays().equals("GUADELOUPE")
-            && !pays().equals("MARTINIQUE")
-            && !pays().equals("REUNION")
-            && !pays().equals("POLYNESIE FRANCAISE")
+        return !this.pays.equals("FRANCE") 
+            && !this.pays.equals("GUADELOUPE")
+            && !this.pays.equals("MARTINIQUE")
+            && !this.pays.equals("REUNION")
+            && !this.pays.equals("POLYNESIE FRANCAISE")
             ;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + id;
+        result = prime * result + ((departement == null) ? 0 : departement.hashCode());
+        result = prime * result + ((pays == null) ? 0 : pays.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Personne other = (Personne) obj;
+        if (id != other.id)
+            return false;
+        if (departement == null) {
+            if (other.departement != null)
+                return false;
+        } else if (!departement.equals(other.departement))
+            return false;
+        if (pays == null) {
+            if (other.pays != null)
+                return false;
+        } else if (!pays.equals(other.pays))
+            return false;
+        return true;
     }
 }

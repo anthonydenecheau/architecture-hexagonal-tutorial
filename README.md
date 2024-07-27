@@ -161,10 +161,152 @@ Les classes `RaceRepositoryTest` et `GeniteurRepositoryTest` sont les tests unit
 
 ### branch feature/step9
 
-[WIP]\
-Implémentation de nouvelles règles\
-Contrôle de la confirmation
+Résumé des règles implémentées.
+* Contrôle de l'absence de litiges sur l'éleveur
+  * GeniteurUseCase
+      - Level : Error
+      - Code : 971
+      - Message : l'éleveur a un litige
+  * GeniteurUseCaseTest
+      - should_not_authorize_eleveur_litiges
+  * GeniteurApplicationITTests
+      - whenPostRequestAndValidGeniteurAndEleveurLitige_thenCorrectReponse
+* Contrôle que le sexe annoncé est correct
+  * GeniteurUseCase
+      - Level : Error
+      - Code : 910
+      - Message : le géniteur n'est pas du bon sexe
+  * GeniteurUseCaseTest
+      - should_not_authorize_sexe
+  * GeniteurApplicationITTests
+      - N/A
+* Contrôle la date de décès pour la femelle
+  * GeniteurUseCase
+      - Level : Error
+      - Code : 940
+      - Message : la lice est déclarée morte à la date de saillie
+  * GeniteurUseCaseTest
+      - should_not_authorize_femelle_deces
+  * GeniteurApplicationITTests
+      - whenPostRequestAndValidGeniteurAndLiceDeces_thenCorrectReponse
+* Contrôle du nombre maximum de portées autorisées pour la femelle
+  * GeniteurUseCase
+      - Level : Error
+      - Code : 977
+      - Message : la lice a déjà fait 8 portées avec des chiots inscrits au LOF
+  * GeniteurUseCaseTest
+      - should_not_authorize_lice_portees
+  * GeniteurApplicationITTests
+      - N/A
+* Alerte s/ le maximum de portées autorisées pour la femelle
+  * GeniteurUseCase
+      - Level : Warning
+      - Code : 978
+      - Message : la portée sera la 8ème portée, ce sera donc la dernière portée pour la lice
+  * GeniteurUseCaseTest
+      - should_warning_lice_portees
+  * GeniteurApplicationITTests
+      - N/A  
+* Contrôle du type d'inscription
+  * GeniteurUseCase
+      - Level : Error
+      - Code : 950
+      - Message : le géniteur est inscrit à titre provisoire
+  * GeniteurUseCaseTest
+      - should_not_authorize_type_inscription
+  * GeniteurApplicationITTests
+      - whenPostRequestAndValidGeniteurAndInscriptionProvisoire_thenCorrectReponse
+* Contrôle cohérence date saillie Vs date naissance
+  * GeniteurUseCase
+      - Level : Error
+      - Code : 930
+      - Message : le géniteur est née après la saillie
+  * GeniteurUseCaseTest
+      - should_not_authorize_geniteur
+  * GeniteurApplicationITTests
+      - whenPostRequestAndValidGeniteurAndDateNaissanceErreur_thenCorrectReponse
+* Contrôle le géniteur a bien l'âge requis pour effectuer une saillie
+  * GeniteurUseCase
+      - Level : Error
+      - Code : 920
+      - Message : le géniteur n'est pas en âge de reproduire
+  * GeniteurUseCaseTest
+      - should_not_authorize_age_minimum
+  * GeniteurApplicationITTests
+      - whenPostRequestAndValidGeniteurAndTropJeune_thenCorrectReponse
+* Contrôle la lice ne doit pas être âgée de plus de 9 mois
+  * GeniteurUseCase
+      - Level : Error
+      - Code : 960
+      - Message : la lice est trop âgée pour reproduire
+  * GeniteurUseCaseTest
+      - should_not_authorize_lice_age_maximum
+  * GeniteurApplicationITTests
+      - whenPostRequestAndValidGeniteurAndTropAgee_thenCorrectReponse
+* Contrôle la lice n'a pas fait de saillie depuis 5 mois
+  * GeniteurUseCase
+      - Level : Error
+      - Code : 975
+      - Message : une saillie a déjà eu lieu lors des 5 derniers mois pour cette lice
+  * GeniteurUseCaseTest
+      - should_not_authorize_lice_saillie
+  * GeniteurApplicationITTests
+      - whenPostRequestAndValidLiceSaillie_thenCorrectReponse
+* Contrôle des litiges s/ le propriétaire
+  * GeniteurUseCase
+      - Level : Error
+      - Code : 976
+      - Message : le propriétaire du géniteur a un litige
+  * GeniteurUseCaseTest
+      - N/A == ne peut pas être écrit car pose un litige s/ la classe `Personne` sans aucune distinction selon le profil
+  * GeniteurApplicationITTests
+      - N/A
+* Contrôle des litiges s/ le géniteur
+  * GeniteurUseCase
+      - Level : Error
+      - Code : 972
+      - Message : le géniteur possède des litiges
+  * GeniteurUseCaseTest
+      - should_not_authorize_geniteur_litiges
+  * GeniteurApplicationITTests
+      - N/A
+* Contrôle des information de la confirmation
+  * le chien s'est présenté à une séance de confirmation mais le chien est en appel de sa confirmation
+    - GeniteurUseCase
+        - Level : Error
+        - Code : 973
+        - Message : le géniteur a un appel sur la confirmation
+    - GeniteurUseCaseTest
+        - should_not_authorize_appel_confirmation
+    - GeniteurApplicationITTests
+        - N/A\
+  * le chien s'est présenté à une séance de confirmation mais le chien est ajourné ou inapte
+    - GeniteurUseCase
+        - Level : Error
+        - Code : 974
+        - Message : le géniteur a été ajourné ou déclaré inapte à la confirmation
+    - GeniteurUseCaseTest
+        - should_not_authorize_ajourne_confirmation
+    - GeniteurApplicationITTests
+        - N/A
+  * le chien ne s'est jamais présenté à une séance de confirmation et ne répond à aucune des règles d'exception
+    - GeniteurUseCase
+        - Level : Error
+        - Code : 970
+        - Message : le géniteur n'est pas confirmé
+    - GeniteurUseCaseTest
+        - should_not_authorize_confirmation
+    - GeniteurApplicationITTests
+        - N/A
 
-Spi
+
+Note : règles d'exception d'un géniteur non confirmé
+* le géniteur est une femelle et l'éleveur déclarant réside dans les DOMTOM ou à l'étranger 
+* le géniteur est un mâle et le propriétaire réside dans les DOMTOM ou à l'étanger
+* le géniteur est inscrit au titre du LIVRE D'ATTENTE
+* le géniteur est un mâle et inscrit au titre du LIVRE ETRANGER
+
+Note : Spi
 * La classe `PersonneInventory`nous permet d'extraire les informations éleveur/propriétaire.\
-La méthode `byId` accepte selon que nous recherchons un eleveur, l'`idEleveur` de l'objet `GeniteurRequest` et l'`id` de l'objet `Geniteur` pour la lecture du propriétaire.
+La méthode `byId` accepte selon que nous recherchons un éleveur, l'`idEleveur` de l'objet `GeniteurRequest` et l'`id` de l'objet `Geniteur` pour la lecture du propriétaire.\
+Selon le profil, la présence de litiges sera lue soit s/ l'éleveur ou s/ le géniteur.

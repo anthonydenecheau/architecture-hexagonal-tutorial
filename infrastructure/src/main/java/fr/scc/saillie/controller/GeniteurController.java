@@ -54,7 +54,8 @@ public class GeniteurController {
             }
             
             messages = validateGeniteur.execute(
-                GeniteurRequest.convertStringToDate(geniteurRequest.getDateSaillie())
+                geniteurRequest.getIdEleveur()
+                , GeniteurRequest.convertStringToDate(geniteurRequest.getDateSaillie())
                 , GeniteurRequest.convertToEntity(geniteurRequest))
             ;
             

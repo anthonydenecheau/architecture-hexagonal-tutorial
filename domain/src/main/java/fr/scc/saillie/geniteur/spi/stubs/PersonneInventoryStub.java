@@ -4,7 +4,6 @@ import java.text.ParseException;
 
 import fr.scc.saillie.ddd.Stub;
 import fr.scc.saillie.geniteur.error.GeniteurException;
-import fr.scc.saillie.geniteur.model.Litige;
 import fr.scc.saillie.geniteur.model.PROFIL;
 import fr.scc.saillie.geniteur.model.Personne;
 import fr.scc.saillie.geniteur.spi.PersonneInventory;
@@ -33,7 +32,7 @@ public class PersonneInventoryStub implements PersonneInventory {
     }
 
     private static Personne initialiserPersonne() throws ParseException {
-        return new Personne(1,"44", "FRANCE", null);
+        return new Personne(1,"44", "FRANCE");
     }
 
     @Override

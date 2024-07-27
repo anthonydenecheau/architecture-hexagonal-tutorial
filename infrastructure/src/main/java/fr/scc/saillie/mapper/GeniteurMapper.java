@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import fr.scc.saillie.geniteur.model.Confirmation;
 import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.model.SEXE;
 import fr.scc.saillie.geniteur.model.TYPE_INSCRIPTION;
@@ -30,6 +31,14 @@ public class GeniteurMapper implements RowMapper<Geniteur> {
             , ConvertStringToLocalDate(rs.getString("DATE_DECES"))
             , TYPE_INSCRIPTION.valueOf(rs.getString("TYPE_INSCRIPTION"))
             , SEXE.valueOf(rs.getString("SEXE"))
+            , new Confirmation(
+                rs.getInt("NUM_DOSSIER_CONFIRMATION")
+                , rs.getInt("NUM_CONFIRMATION")
+                , ConvertStringToLocalDate(rs.getString("DATE_CONFIRMATION"))
+                , (rs.getString("ON_APTE_CONFIRMATION").equals("O") ? true : false)
+                , (rs.getString("ON_APPEL_ENCOURS_CONF").equals("O") ? true : false)
+                , (rs.getString("ON_AJOURNE_CONFIRMATION").equals("O") ? true : false))
+            , null
             , null
         );
     }

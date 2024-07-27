@@ -59,6 +59,12 @@ public class GeniteurApplicationITTests {
     @Value("classpath:__files/payloads/geniteur-trop-agee.json")
     private Resource geniteur_trop_agee;
 
+    @Value("classpath:__files/payloads/geniteur-eleveur-litige.json")
+    private Resource geniteur_eleveur_litige;
+
+    @Value("classpath:__files/payloads/geniteur-lice-saillie.json")
+    private Resource geniteur_lice_saillie;
+
     @Test
     @DisplayName("Step8")
     public void whenPostRequestAndMissingDateSaillie_thenCorrectReponse() throws Exception {
@@ -142,6 +148,30 @@ public class GeniteurApplicationITTests {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     }
+
+    @Test
+    @DisplayName("Step9")
+    public void whenPostRequestAndValidGeniteurAndEleveurLitige_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_eleveur_litige))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("l'éleveur a un litige"))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    }    
+
+    @Test
+    @DisplayName("Step9")
+    public void whenPostRequestAndValidLiceSaillie_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_lice_saillie))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("une saillie a déjà eu lieu lors des 5 derniers mois pour cette lice"))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    }    
 
     @TestConfiguration
     @ComponentScan(

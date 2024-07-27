@@ -56,10 +56,10 @@ public class GeniteurUseCase implements ValidateGeniteur {
             }
 
             // Lecture des informations du géniteur
-            Geniteur _g = geniteurInventory.byId(geniteur.id());
+            Geniteur _g = geniteurInventory.byId(geniteur.getId());
 
             // Contrôle que le sexe annoncé est correct
-            if (!geniteur.sexe().equals(_g.sexe())) {
+            if (!geniteur.getSexe().equals(_g.getSexe())) {
                 messages.add(new Message(LEVEL.ERROR,"910","le géniteur n'est pas du bon sexe"));
                 return messages;
             }
@@ -70,6 +70,17 @@ public class GeniteurUseCase implements ValidateGeniteur {
                 return messages;
             }
 
+            // Contrôle du nombre maximum de portées autorisées pour la femelle
+            if (_g.hasReachedMaxPortee()) {
+                messages.add(new Message(LEVEL.ERROR,"977","la lice a déjà fait 8 portées avec des chiots inscrits au LOF"));
+                return messages;
+            }
+
+            // Alerte s/ le nombre maximum de portées autorisées pour la femelle
+            if (_g.isClosedToReachedMaxPortee()) {
+                messages.add(new Message(LEVEL.WARNING,"978","la portée sera la 8ème portée, ce sera donc la dernière portée pour la lice"));
+            }
+            
             // Contrôle du type d'inscription
             if (_g.isRegisteredAsProvoisire()) {
                 messages.add(new Message(LEVEL.ERROR,"950","le géniteur est inscrit à titre provisoire"));
@@ -81,7 +92,7 @@ public class GeniteurUseCase implements ValidateGeniteur {
                 messages.add(new Message(LEVEL.ERROR,"930","le géniteur est née après la saillie"));
                 return messages;
             }
-            if (!_g.hasAgeMinimumToReproduce(dateSaillie, raceInventory.byId(_g.idRace()).ageMinimum())) {
+            if (!_g.hasAgeMinimumToReproduce(dateSaillie, raceInventory.byId(_g.getIdRace()).ageMinimum())) {
                 messages.add(new Message(LEVEL.ERROR,"920","le géniteur n'est pas en âge de reproduire"));
                 return messages;
             }
@@ -90,10 +101,16 @@ public class GeniteurUseCase implements ValidateGeniteur {
                 return messages;
             }
 
+            // La lice n'a pas fait de saillie depuis 5 mois
+            if (!_g.isSaillieLiceDelai(dateSaillie)) {
+                messages.add(new Message(LEVEL.ERROR,"975","une saillie a déjà eu lieu lors des 5 derniers mois pour cette lice"));
+                return messages;
+            }
+
             // Contrôle des litiges s/ le propriétaire
-            Personne proprietaire = personneInventory.byId(_g.id(), PROFIL.PROPRIETAIRE);
+            Personne proprietaire = personneInventory.byId(_g.getId(), PROFIL.PROPRIETAIRE);
             if (proprietaire.hasLitige(dateSaillie)) {
-                messages.add(new Message(LEVEL.ERROR,"975","le propriétaire du géniteur a un litige"));
+                messages.add(new Message(LEVEL.ERROR,"976","le propriétaire du géniteur a un litige"));
                 return messages;
             }    
 
@@ -104,21 +121,21 @@ public class GeniteurUseCase implements ValidateGeniteur {
             }
 
             // Lecture des information de la confirmation
-            if (_g.confirmation() != null) {
+            if (_g.getConfirmation() != null) {
                 // le chien est en appel de sa confirmation
-                if (_g.confirmation().numDossier() > 0 && _g.confirmation().isOnAppel()) {
+                if (_g.getConfirmation().numDossier() > 0 && _g.getConfirmation().isOnAppel()) {
                     messages.add(new Message(LEVEL.ERROR,"973","le géniteur a un appel sur la confirmation"));
                     return messages;
                 }
                 // un dossier de confirmation a été initié mais le chien a été ajourné ou déclaré inapte
-                if (_g.confirmation().numDossier() > 0 && (_g.confirmation().isAjourne() || !_g.confirmation().isConfirme())) {
+                if (_g.getConfirmation().numDossier() > 0 && (_g.getConfirmation().isAjourne() || !_g.getConfirmation().isConfirme())) {
                     messages.add(new Message(LEVEL.ERROR,"974","le géniteur a été ajourné ou déclaré inapte à la confirmation"));
                     return messages;
                 }
             }            
 
             // Le géniteur n'est pas confirmé ici == exception pour le géniteur non confirmé
-            if (_g.confirmation() == null && !_g.isExceptionConfirme(dateSaillie, eleveur, proprietaire)) {
+            if (_g.getConfirmation() == null && !_g.isExceptionConfirme(dateSaillie, eleveur, proprietaire)) {
                 messages.add(new Message(LEVEL.ERROR,"970","le géniteur n'est pas confirmé"));
                 return messages;
             }

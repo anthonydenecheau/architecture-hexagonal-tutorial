@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import fr.scc.saillie.geniteur.error.GeniteurException;
+import fr.scc.saillie.geniteur.model.Confirmation;
 import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.model.SEXE;
 import fr.scc.saillie.geniteur.model.TYPE_INSCRIPTION;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -28,8 +30,9 @@ public class GeniteurRepositoryTest {
     public void should_read_geniteur_byId() throws Exception {
         //Given
         Integer idGeniteur = 1;
+        Confirmation confirmation = new Confirmation(202300001, 1,  LocalDate.parse("01/01/2023", formatter), true, false, false);
         //When
-        Geniteur geniteur = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, null);
+        Geniteur geniteur = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, confirmation, null, asList());
         //Then
         assertThat(geniteurRepository.byId(idGeniteur)).isEqualTo(geniteur);
     }    

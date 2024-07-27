@@ -42,13 +42,14 @@ public class GeniteurInventoryStub implements GeniteurInventory {
     private static Geniteur initialiserGeniteur() throws ParseException {
         return new Geniteur(
             1
-            , 56, 
-            LocalDate.parse("01/01/2022", formatter), 
-            null, 
-            TYPE_INSCRIPTION.DESCENDANCE, 
-            SEXE.FEMELLE, 
-            new Confirmation(202000001, 1235, LocalDate.parse("01/02/2023", formatter), true, false, false),
-            asList()
+            , 56
+            , LocalDate.parse("01/01/2022", formatter)
+            , null 
+            , TYPE_INSCRIPTION.DESCENDANCE 
+            , SEXE.FEMELLE
+            , new Confirmation(202000001, 1235, LocalDate.parse("01/02/2023", formatter), true, false, false)
+            , asList()
+            , asList()
         );
     }
 
