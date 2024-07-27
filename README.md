@@ -309,18 +309,18 @@ Résumé des règles implémentées.
         - [TODO] 
 * Contrôle de l'enregistrement d'une généalogie complète
   * GeniteurUseCase
-        - Level : Error
-        - Code : 979
-        - Message : la généalogie du géniteur n'est pas complète sur 3 générations
+      - Level : Error
+      - Code : 979
+      - Message : la généalogie du géniteur n'est pas complète sur 3 générations
   * GeniteurUseCaseTest
       - should_not_authorize_genealogie_complete
   * GeniteurApplicationITTests
       - [TODO]
 * Contrôle de l'enregistrement empreinte ADN
   * GeniteurUseCase
-        - Level : Error
-        - Code : 980
-        - Message : l'empreinte ADN du géniteur n'est pas enregistrée
+      - Level : Error
+      - Code : 980
+      - Message : l'empreinte ADN du géniteur n'est pas enregistrée
   * GeniteurUseCaseTest
       - should_not_authorize_empreinte_adn
   * GeniteurApplicationITTests
