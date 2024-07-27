@@ -179,7 +179,7 @@ Résumé des règles implémentées.
   * GeniteurUseCaseTest
       - should_not_authorize_sexe
   * GeniteurApplicationITTests
-      - N/A
+      - [TODO]
 * Contrôle la date de décès pour la femelle
   * GeniteurUseCase
       - Level : Error
@@ -197,7 +197,7 @@ Résumé des règles implémentées.
   * GeniteurUseCaseTest
       - should_not_authorize_lice_portees
   * GeniteurApplicationITTests
-      - N/A
+      - [TODO]
 * Alerte s/ le maximum de portées autorisées pour la femelle
   * GeniteurUseCase
       - Level : Warning
@@ -206,7 +206,7 @@ Résumé des règles implémentées.
   * GeniteurUseCaseTest
       - should_warning_lice_portees
   * GeniteurApplicationITTests
-      - N/A  
+      - [TODO] 
 * Contrôle du type d'inscription
   * GeniteurUseCase
       - Level : Error
@@ -269,7 +269,7 @@ Résumé des règles implémentées.
   * GeniteurUseCaseTest
       - should_not_authorize_geniteur_litiges
   * GeniteurApplicationITTests
-      - N/A
+      - [TODO]
 * Contrôle des information de la confirmation
   * le chien s'est présenté à une séance de confirmation mais le chien est en appel de sa confirmation
     - GeniteurUseCase
@@ -279,7 +279,7 @@ Résumé des règles implémentées.
     - GeniteurUseCaseTest
         - should_not_authorize_appel_confirmation
     - GeniteurApplicationITTests
-        - N/A\
+        - [TODO]
   * le chien s'est présenté à une séance de confirmation mais le chien est ajourné ou inapte
     - GeniteurUseCase
         - Level : Error
@@ -288,7 +288,7 @@ Résumé des règles implémentées.
     - GeniteurUseCaseTest
         - should_not_authorize_ajourne_confirmation
     - GeniteurApplicationITTests
-        - N/A
+        - [TODO]
   * le chien ne s'est jamais présenté à une séance de confirmation et ne répond à aucune des règles d'exception
     - GeniteurUseCase
         - Level : Error
@@ -297,7 +297,21 @@ Résumé des règles implémentées.
     - GeniteurUseCaseTest
         - should_not_authorize_confirmation
     - GeniteurApplicationITTests
-        - N/A
+        - [TODO]
+* Contrôle de l'enregistrement d'une généalogie complète
+  * GeniteurUseCase
+      - [TODO]
+  * GeniteurUseCaseTest
+      - [TODO]
+  * GeniteurApplicationITTests
+      - [TODO]
+* Contrôle de l'enregistrement empreinte ADN
+  * GeniteurUseCase
+      - [TODO]
+  * GeniteurUseCaseTest
+      - [TODO]
+  * GeniteurApplicationITTests
+      - [TODO]
 
 
 Note : règles d'exception d'un géniteur non confirmé
@@ -310,3 +324,6 @@ Note : Spi
 * La classe `PersonneInventory`nous permet d'extraire les informations éleveur/propriétaire.\
 La méthode `byId` accepte selon que nous recherchons un éleveur, l'`idEleveur` de l'objet `GeniteurRequest` et l'`id` de l'objet `Geniteur` pour la lecture du propriétaire.\
 Selon le profil, la présence de litiges sera lue soit s/ l'éleveur ou s/ le géniteur.
+
+[TODO]
+Créer un référentiel des messages
