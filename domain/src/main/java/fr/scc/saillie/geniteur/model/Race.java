@@ -1,5 +1,12 @@
 package fr.scc.saillie.geniteur.model;
 
-public record Race(Integer id, Integer ageMinimum) {
+import java.time.LocalDate;
+
+/**
+ * Classe Race
+ *
+ * @author anthonydenecheau
+ */
+public record Race(Integer id, LocalDate dateDerogationAdn, Integer ageMinimum) {
 
 }
