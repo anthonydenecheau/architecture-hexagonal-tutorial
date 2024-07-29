@@ -352,6 +352,9 @@ Selon le profil, la présence de litiges sera lue soit s/ l'éleveur ou s/ le g�
 
 Création d'un référentiel pour les messages via la class `MESSAGE_APPLICATION`
 
-[TODO]\
-Implémenter une réglementation spécifique selon la date de saillie (décisions commission elevage)
 
+### branch feature/step11
+
+Implémenter une réglementation spécifique selon la date de saillie (décisions commission elevage)
+* Création d'une réglementation pour le `geniteur` via la classe `ReglementationFactory`
+Cette classe permet d'appliquer les nouvelles réglements de la commision élevage
