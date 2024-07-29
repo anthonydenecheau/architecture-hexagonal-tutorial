@@ -9,6 +9,7 @@ import fr.scc.saillie.geniteur.api.ValidateGeniteur;
 import fr.scc.saillie.geniteur.error.GeniteurException;
 import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.model.LEVEL;
+import fr.scc.saillie.geniteur.model.MESSAGE_APPLICATION;
 import fr.scc.saillie.geniteur.model.Message;
 import fr.scc.saillie.geniteur.model.PROFIL;
 import fr.scc.saillie.geniteur.model.Personne;
@@ -54,7 +55,7 @@ public class GeniteurUseCase implements ValidateGeniteur {
             // Lecture des litiges sur l'éleveur
             Personne eleveur = personneInventory.byId(idEleveur, PROFIL.ELEVEUR);
             if (eleveur.hasLitige(dateSaillie)) {
-                messages.add(new Message(LEVEL.ERROR,"971","l'éleveur a un litige"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.ELEVEUR_LITIGE.code,MESSAGE_APPLICATION.ELEVEUR_LITIGE.message));
                 return messages;
             }
 
@@ -63,63 +64,63 @@ public class GeniteurUseCase implements ValidateGeniteur {
 
             // Contrôle que le sexe annoncé est correct
             if (!geniteur.getSexe().equals(_g.getSexe())) {
-                messages.add(new Message(LEVEL.ERROR,"910","le géniteur n'est pas du bon sexe"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_SEXE.code,MESSAGE_APPLICATION.GENITEUR_SEXE.message));
                 return messages;
             }
             
             // Contrôle la date de décès pour la femelle
             if (!_g.isAliveWhenSaillieHasBeenDone(dateSaillie)) {
-                messages.add(new Message(LEVEL.ERROR,"940","la lice est déclarée morte à la date de saillie"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_DECES.code,MESSAGE_APPLICATION.GENITEUR_DECES.message));
                 return messages;
             }
 
             // Contrôle du nombre maximum de portées autorisées pour la femelle
             if (_g.hasReachedMaxPortee()) {
-                messages.add(new Message(LEVEL.ERROR,"977","la lice a déjà fait 8 portées avec des chiots inscrits au LOF"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_MAX_PORTEES.code,MESSAGE_APPLICATION.GENITEUR_MAX_PORTEES.code));
                 return messages;
             }
 
             // Alerte s/ le nombre maximum de portées autorisées pour la femelle
             if (_g.isClosedToReachedMaxPortee()) {
-                messages.add(new Message(LEVEL.WARNING,"978","la portée sera la 8ème portée, ce sera donc la dernière portée pour la lice"));
+                messages.add(new Message(LEVEL.WARNING,MESSAGE_APPLICATION.GENITEUR_ALERTE_PORTEES.code,MESSAGE_APPLICATION.GENITEUR_ALERTE_PORTEES.message));
             }
             
             // Contrôle du type d'inscription
             if (_g.isRegisteredAsProvoisire()) {
-                messages.add(new Message(LEVEL.ERROR,"950","le géniteur est inscrit à titre provisoire"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_PROVISOIRE.code,MESSAGE_APPLICATION.GENITEUR_PROVISOIRE.message));
                 return messages;
             }
 
             // Contrôle des dates
             if (!_g.isValidDateNaissance(dateSaillie)) {
-                messages.add(new Message(LEVEL.ERROR,"930","le géniteur est née après la saillie"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_DATE_NAISSANCE.code,MESSAGE_APPLICATION.GENITEUR_DATE_NAISSANCE.message));
                 return messages;
             }
             if (!_g.hasAgeMinimumToReproduce(dateSaillie, raceInventory.byId(_g.getIdRace()).ageMinimum())) {
-                messages.add(new Message(LEVEL.ERROR,"920","le géniteur n'est pas en âge de reproduire"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_TROP_JEUNE.code,MESSAGE_APPLICATION.GENITEUR_TROP_JEUNE.message));
                 return messages;
             }
             if (_g.isTooOldToReproduce(dateSaillie)) {
-                messages.add(new Message(LEVEL.ERROR,"960","la lice est trop âgée pour reproduire"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_TROP_AGE.code,MESSAGE_APPLICATION.GENITEUR_TROP_AGE.message));
                 return messages;
             }
 
             // La lice n'a pas fait de saillie depuis 5 mois
             if (!_g.isSaillieLiceDelai(dateSaillie)) {
-                messages.add(new Message(LEVEL.ERROR,"975","une saillie a déjà eu lieu lors des 5 derniers mois pour cette lice"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_DELAI.code,MESSAGE_APPLICATION.GENITEUR_DELAI.message));
                 return messages;
             }
 
             // Contrôle des litiges s/ le propriétaire
             Personne proprietaire = personneInventory.byId(_g.getId(), PROFIL.PROPRIETAIRE);
             if (proprietaire != null && proprietaire.hasLitige(dateSaillie)) {
-                messages.add(new Message(LEVEL.ERROR,"976","le propriétaire du géniteur a un litige"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.PROPRIETAIRE_LITIGE.code,MESSAGE_APPLICATION.PROPRIETAIRE_LITIGE.message));
                 return messages;
             }    
 
             // Contrôle des litiges s/ le géniteur
             if (_g.hasLitige(dateSaillie)) {
-                messages.add(new Message(LEVEL.ERROR,"972","le géniteur possède des litiges"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_LITIGE.code,MESSAGE_APPLICATION.GENITEUR_LITIGE.message));
                 return messages;
             }
 
@@ -127,36 +128,36 @@ public class GeniteurUseCase implements ValidateGeniteur {
             if (_g.getConfirmation() != null) {
                 // le chien est en appel de sa confirmation
                 if (_g.getConfirmation().numDossier() > 0 && _g.getConfirmation().isOnAppel()) {
-                    messages.add(new Message(LEVEL.ERROR,"973","le géniteur a un appel sur la confirmation"));
+                    messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_APPEL_CONFIRMATION.code,MESSAGE_APPLICATION.GENITEUR_APPEL_CONFIRMATION.message));
                     return messages;
                 }
                 // un dossier de confirmation a été initié mais le chien a été ajourné ou déclaré inapte
                 if (_g.getConfirmation().numDossier() > 0 && (_g.getConfirmation().isAjourne() || !_g.getConfirmation().isConfirme())) {
-                    messages.add(new Message(LEVEL.ERROR,"974","le géniteur a été ajourné ou déclaré inapte à la confirmation"));
+                    messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_INAPTE_CONFIRMATION.code,MESSAGE_APPLICATION.GENITEUR_INAPTE_CONFIRMATION.message));
                     return messages;
                 }
             }            
 
             // Le géniteur n'est pas confirmé ici == exception pour le géniteur non confirmé
             if (_g.getConfirmation() == null && !_g.isExceptionConfirme(dateSaillie, eleveur, proprietaire)) {
-                messages.add(new Message(LEVEL.ERROR,"970","le géniteur n'est pas confirmé"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_NON_CONFIRME.code,MESSAGE_APPLICATION.GENITEUR_NON_CONFIRME.message));
                 return messages;
             }
 
             // Controle que la généalogie du géniteur est complète sur 3 générations
             if (!_g.isGenealogieComplete()) {
-                messages.add(new Message(LEVEL.ERROR,"979","la généalogie du géniteur n'est pas complète sur 3 générations"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_GENEALOGIE.code,MESSAGE_APPLICATION.GENITEUR_GENEALOGIE.message));
                 return messages;
             }
 
             // Controle que l'empreinte ADN du géniteur est enregistrée
             if (!_g.hasValidProfileAdn(dateSaillie, raceInventory.byId(_g.getIdRace()).dateDerogationAdn(), adnInventory.isCommandeAdnEnCours(_g.getId()))) {
-                messages.add(new Message(LEVEL.ERROR,"980","l'empreinte ADN du géniteur n'est pas enregistrée"));
+                messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_EMPREINTE.code,MESSAGE_APPLICATION.GENITEUR_EMPREINTE.message));
                 return messages;
             }
             
             // Validation OK
-            messages.add(new Message(LEVEL.INFO,"01","le géniteur est validé"));
+            messages.add(new Message(LEVEL.INFO,MESSAGE_APPLICATION.VALIDE.code,MESSAGE_APPLICATION.VALIDE.message));
 
         } catch (Exception e) {
             messages.add(new Message(LEVEL.ERROR,"900",e.getMessage()));

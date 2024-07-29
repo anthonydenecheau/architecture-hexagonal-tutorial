@@ -18,6 +18,7 @@ import fr.scc.saillie.geniteur.api.ValidateGeniteur;
 import fr.scc.saillie.geniteur.model.Confirmation;
 import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.model.Litige;
+import fr.scc.saillie.geniteur.model.MESSAGE_APPLICATION;
 import fr.scc.saillie.geniteur.model.Message;
 import fr.scc.saillie.geniteur.model.Personne;
 import fr.scc.saillie.geniteur.model.Portee;
@@ -81,7 +82,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur est validé");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.VALIDE.message);
     }
 
     @Test
@@ -96,7 +97,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur est née après la saillie");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_DATE_NAISSANCE.message);
     }
 
     @Test
@@ -111,7 +112,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur n'est pas en âge de reproduire");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_TROP_JEUNE.message);
     }
 
     @Test
@@ -126,7 +127,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur est validé");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.VALIDE.message);
     }
 
     @Test
@@ -142,7 +143,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur n'est pas du bon sexe");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_SEXE.message);
     }
 
     @Test
@@ -159,7 +160,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("la lice est déclarée morte à la date de saillie");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_DECES.message);
     }
 
     @Test
@@ -176,7 +177,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur est inscrit à titre provisoire");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_PROVISOIRE.message);
     }
 
     @Test
@@ -193,7 +194,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("la lice est trop âgée pour reproduire");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_TROP_AGE.message);
     }
 
     @Test
@@ -214,7 +215,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("l'éleveur a un litige");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.ELEVEUR_LITIGE.message);
     }
 
     @Test
@@ -233,7 +234,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur possède des litiges");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_LITIGE.message);
     }
 
     @Test
@@ -252,7 +253,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur est validé");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.VALIDE.message);
     }
 
     @Test
@@ -270,7 +271,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur a un appel sur la confirmation");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_APPEL_CONFIRMATION.message);
     }
 
     @Test
@@ -288,7 +289,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur a été ajourné ou déclaré inapte à la confirmation");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_INAPTE_CONFIRMATION.message);
     }
 
     @Test
@@ -305,7 +306,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("le géniteur n'est pas confirmé");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_NON_CONFIRME.message);
     }
 
     @Test
@@ -327,7 +328,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("une saillie a déjà eu lieu lors des 5 derniers mois pour cette lice");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_DELAI.message);
     }
 
     @Test
@@ -354,7 +355,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("la lice a déjà fait 8 portées avec des chiots inscrits au LOF");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_MAX_PORTEES.code);
     }
 
     @Test
@@ -380,7 +381,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsAnyOf("la portée sera la 8ème portée, ce sera donc la dernière portée pour la lice");
+        assertThat(messages).extracting(m->m.message()).containsAnyOf(MESSAGE_APPLICATION.GENITEUR_ALERTE_PORTEES.message);
     }
 
     @Test
@@ -399,7 +400,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("la généalogie du géniteur n'est pas complète sur 3 générations");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_GENEALOGIE.message);
     }
 
     @Test
@@ -418,7 +419,7 @@ public class GeniteurUseCaseTest {
         } catch (Exception e) {
         }
         //Then
-        assertThat(messages).extracting(m->m.message()).containsExactly("l'empreinte ADN du géniteur n'est pas enregistrée");
+        assertThat(messages).extracting(m->m.message()).containsExactly(MESSAGE_APPLICATION.GENITEUR_EMPREINTE.message);
     }
 
 }

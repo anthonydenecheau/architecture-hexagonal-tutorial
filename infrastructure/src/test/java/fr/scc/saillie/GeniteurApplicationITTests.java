@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.FileCopyUtils;
 
 import fr.scc.saillie.config.DomainConfiguration;
+import fr.scc.saillie.geniteur.model.MESSAGE_APPLICATION;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -102,7 +103,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_date_naissance))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur est née après la saillie"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.GENITEUR_DATE_NAISSANCE.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     }
@@ -114,7 +115,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_default))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur est validé"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.VALIDE.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     }
@@ -126,7 +127,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_trop_jeune))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur n'est pas en âge de reproduire"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.GENITEUR_TROP_JEUNE.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     }
@@ -138,7 +139,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_date_deces))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("la lice est déclarée morte à la date de saillie"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.GENITEUR_DECES.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     }
@@ -150,7 +151,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_inscription_provisoire))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur est inscrit à titre provisoire"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.GENITEUR_PROVISOIRE.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     }
@@ -162,7 +163,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_trop_agee))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("la lice est trop âgée pour reproduire"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.GENITEUR_TROP_AGE.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     }
@@ -174,7 +175,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_eleveur_litige))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("l'éleveur a un litige"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.ELEVEUR_LITIGE.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     }    
@@ -186,7 +187,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_lice_saillie))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("une saillie a déjà eu lieu lors des 5 derniers mois pour cette lice"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.GENITEUR_DELAI.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     }    
@@ -198,7 +199,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_lice_litige))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur possède des litiges"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.GENITEUR_LITIGE.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     } 
@@ -210,7 +211,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_confirmation_appel))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur a un appel sur la confirmation"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.GENITEUR_APPEL_CONFIRMATION.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     }     
@@ -222,7 +223,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_confirmation_inapte))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur a été ajourné ou déclaré inapte à la confirmation"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.GENITEUR_INAPTE_CONFIRMATION.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     } 
@@ -234,7 +235,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_empreinte_adn))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("l'empreinte ADN du géniteur n'est pas enregistrée"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.GENITEUR_EMPREINTE.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     } 
@@ -246,7 +247,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_genealogie_incomplete))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("la généalogie du géniteur n'est pas complète sur 3 générations"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.GENITEUR_GENEALOGIE.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     } 
@@ -258,7 +259,7 @@ public class GeniteurApplicationITTests {
                 .content(asString(geniteur_genealogie_complete_titre_initial))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur est validé"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.VALIDE.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     } 
