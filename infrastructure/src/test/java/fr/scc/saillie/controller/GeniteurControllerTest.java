@@ -16,6 +16,7 @@ import org.springframework.util.FileCopyUtils;
 
 import fr.scc.saillie.config.DomainConfiguration;
 import fr.scc.saillie.ddd.Stub;
+import fr.scc.saillie.geniteur.model.MESSAGE_APPLICATION;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -59,7 +60,7 @@ public class GeniteurControllerTest {
                 .content(asString(geniteur_default))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur est validé"))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.VALIDE.message))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     }

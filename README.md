@@ -346,3 +346,12 @@ Note : Spi
 * La classe `PersonneInventory`nous permet d'extraire les informations éleveur/propriétaire.\
 La méthode `byId` accepte selon que nous recherchons un éleveur, l'`idEleveur` de l'objet `GeniteurRequest` et l'`id` de l'objet `Geniteur` pour la lecture du propriétaire.\
 Selon le profil, la présence de litiges sera lue soit s/ l'éleveur ou s/ le géniteur.
+
+
+### branch feature/step10
+
+Création d'un référentiel pour les messages via la class `MESSAGE_APPLICATION`
+
+[TODO]\
+Implémenter une réglementation spécifique selon la date de saillie (décisions commission elevage)
+
