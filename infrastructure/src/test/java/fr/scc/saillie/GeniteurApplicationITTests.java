@@ -74,6 +74,15 @@ public class GeniteurApplicationITTests {
     @Value("classpath:__files/payloads/geniteur-confirmation-inapte.json")
     private Resource geniteur_confirmation_inapte;
 
+    @Value("classpath:__files/payloads/geniteur-empreinte-adn.json")
+    private Resource geniteur_empreinte_adn;
+
+    @Value("classpath:__files/payloads/geniteur-genealogie-incomplete.json")
+    private Resource geniteur_genealogie_incomplete;
+
+    @Value("classpath:__files/payloads/geniteur-genealogie-complete-titre-initial.json")
+    private Resource geniteur_genealogie_complete_titre_initial;
+
     @Test
     @DisplayName("Step8")
     public void whenPostRequestAndMissingDateSaillie_thenCorrectReponse() throws Exception {
@@ -214,6 +223,42 @@ public class GeniteurApplicationITTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur a été ajourné ou déclaré inapte à la confirmation"))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    } 
+
+    @Test
+    @DisplayName("Step9")
+    public void whenPostRequestAndValidMissingEmpreinteAdn_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_empreinte_adn))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("l'empreinte ADN du géniteur n'est pas enregistrée"))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    } 
+
+    @Test
+    @DisplayName("Step9")
+    public void whenPostRequestAndValidGenealogieIncomplete_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_genealogie_incomplete))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("la généalogie du géniteur n'est pas complète sur 3 générations"))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    } 
+
+    @Test
+    @DisplayName("Step9")
+    public void whenPostRequestAndValidGenealogieTitreInitial_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_genealogie_complete_titre_initial))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString("le géniteur est validé"))))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
                 ;
     } 

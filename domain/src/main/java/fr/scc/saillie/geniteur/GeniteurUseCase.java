@@ -12,6 +12,7 @@ import fr.scc.saillie.geniteur.model.LEVEL;
 import fr.scc.saillie.geniteur.model.Message;
 import fr.scc.saillie.geniteur.model.PROFIL;
 import fr.scc.saillie.geniteur.model.Personne;
+import fr.scc.saillie.geniteur.spi.AdnInventory;
 import fr.scc.saillie.geniteur.spi.GeniteurInventory;
 import fr.scc.saillie.geniteur.spi.PersonneInventory;
 import fr.scc.saillie.geniteur.spi.RaceInventory;
@@ -27,11 +28,13 @@ public class GeniteurUseCase implements ValidateGeniteur {
     private final RaceInventory raceInventory;
     private final GeniteurInventory geniteurInventory;
     private final PersonneInventory personneInventory;
+    private final AdnInventory adnInventory;
 
-    public GeniteurUseCase(PersonneInventory personneInventory, GeniteurInventory geniteurInventory, RaceInventory raceInventory) {
+    public GeniteurUseCase(PersonneInventory personneInventory, GeniteurInventory geniteurInventory, RaceInventory raceInventory, AdnInventory adnInventory) {
         this.personneInventory = personneInventory;
         this.geniteurInventory = geniteurInventory;
         this.raceInventory = raceInventory;
+        this.adnInventory = adnInventory;
     }
     
     /** 
@@ -147,7 +150,7 @@ public class GeniteurUseCase implements ValidateGeniteur {
             }
 
             // Controle que l'empreinte ADN du géniteur est enregistrée
-            if (!_g.isEmpreinteAdn()) {
+            if (!_g.hasValidProfileAdn(dateSaillie, raceInventory.byId(_g.getIdRace()).dateDerogationAdn(), adnInventory.isCommandeAdnEnCours(_g.getId()))) {
                 messages.add(new Message(LEVEL.ERROR,"980","l'empreinte ADN du géniteur n'est pas enregistrée"));
                 return messages;
             }

@@ -22,6 +22,7 @@ public class RaceRepository implements RaceInventory {
     public Race byId(Integer id) throws GeniteurException {
         Race race = null;
         String sql = "SELECT r.IDENT_RRACE " +
+            " , TO_CHAR(r.DATE_DEROGATION_ADN,'DD/MM/YYYY') DATE_DEROGATION_ADN " +
             " , r.NB_AGE_MINI_CONFIRMATION " +
             " FROM RRACE r " +
             " WHERE r.IDENT_RRACE = ? "
@@ -37,7 +38,7 @@ public class RaceRepository implements RaceInventory {
     }
 
     public Race Step6_byGeniteurId(Integer id) throws GeniteurException {
-        return new Race(56, 12);
+        return new Race(56, null, 12);
     }
 
 }

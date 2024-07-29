@@ -315,7 +315,16 @@ Résumé des règles implémentées.
   * GeniteurUseCaseTest
       - should_not_authorize_genealogie_complete
   * GeniteurApplicationITTests
-      - [TODO]
+      - whenPostRequestAndValidGenealogieIncomplete_thenCorrectReponse
+* Contrôle de l'enregistrement d'une généalogie complète (généalogie à Titre initial)
+  * GeniteurUseCase
+      - Level : Info
+      - Code : 01
+      - Message : le géniteur est validé
+  * GeniteurUseCaseTest
+      - N/A
+  * GeniteurApplicationITTests
+      - whenPostRequestAndValidGenealogieTitreInitial_thenCorrectReponse
 * Contrôle de l'enregistrement empreinte ADN
   * GeniteurUseCase
       - Level : Error
@@ -324,7 +333,7 @@ Résumé des règles implémentées.
   * GeniteurUseCaseTest
       - should_not_authorize_empreinte_adn
   * GeniteurApplicationITTests
-      - [TODO]
+      - whenPostRequestAndValidMissingEmpreinteAdn_thenCorrectReponse
 
 
 Note : règles d'exception d'un géniteur non confirmé
@@ -337,6 +346,3 @@ Note : Spi
 * La classe `PersonneInventory`nous permet d'extraire les informations éleveur/propriétaire.\
 La méthode `byId` accepte selon que nous recherchons un éleveur, l'`idEleveur` de l'objet `GeniteurRequest` et l'`id` de l'objet `Geniteur` pour la lecture du propriétaire.\
 Selon le profil, la présence de litiges sera lue soit s/ l'éleveur ou s/ le géniteur.
-
-[TODO]
-Créer un référentiel des messages

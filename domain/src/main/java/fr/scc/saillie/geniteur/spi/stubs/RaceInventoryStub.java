@@ -31,7 +31,7 @@ public class RaceInventoryStub implements RaceInventory {
     }
 
     private static Race initialiserRace() throws ParseException {
-        return new Race(56, 12);
+        return new Race(56, null, 12);
     }
 
     @Override

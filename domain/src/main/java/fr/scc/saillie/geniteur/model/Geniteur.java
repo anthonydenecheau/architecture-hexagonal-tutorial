@@ -261,6 +261,27 @@ public class Geniteur  {
             return false;
     }
 
+    /** 
+     * <p>l'empreinte Adn du géniteur est enregistrée ou le géniteur entre dans une exception </p>
+     * @return boolean
+     */
+    public boolean hasValidProfileAdn(LocalDate dateSaillie, LocalDate dateDerogrationControleADN, boolean isCommandeAdnEnCours) {
+        
+        // si le chien appartient à une race qui est exemptée de l'obligation de l'empreinte ADN, alors l'empreinte ADN est valide
+        // la date de saillie de saillie est postérieure à la date de dérogation de l'obligation de l'empreinte ADN            
+        if (dateDerogrationControleADN != null && dateDerogrationControleADN.isBefore(dateSaillie))
+            return true;
+
+        // si le dossier a été exempté de l'obligation de l'empreinte ADN par le service ADN, alors l'empreinte ADN est valide
+        // [TODO] la DS a été saisie
+
+        // si une commande ADN est en cours de traitement pour le chien, alors l'empreinte ADN est valide
+        if (isCommandeAdnEnCours)
+            return true;
+        
+        return this.isEmpreinteAdn();
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

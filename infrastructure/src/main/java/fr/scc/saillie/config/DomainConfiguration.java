@@ -6,6 +6,7 @@ import org.springframework.context.annotation.FilterType;
 
 import fr.scc.saillie.ddd.DomainService;
 import fr.scc.saillie.ddd.Stub;
+import fr.scc.saillie.geniteur.spi.stubs.AdnInventoryStub;
 import fr.scc.saillie.geniteur.spi.stubs.GeniteurInventoryStub;
 import fr.scc.saillie.geniteur.spi.stubs.PersonneInventoryStub;
 import fr.scc.saillie.geniteur.spi.stubs.RaceInventoryStub;
@@ -14,6 +15,6 @@ import fr.scc.saillie.geniteur.spi.stubs.RaceInventoryStub;
 @ComponentScan(
         basePackages = {"fr.scc.saillie.geniteur"},
         includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {DomainService.class,Stub.class})},
-        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {PersonneInventoryStub.class,GeniteurInventoryStub.class, RaceInventoryStub.class})})
+        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {AdnInventoryStub.class, PersonneInventoryStub.class,GeniteurInventoryStub.class, RaceInventoryStub.class})})
 public class DomainConfiguration {
 }
