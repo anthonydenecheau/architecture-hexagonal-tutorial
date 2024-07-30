@@ -189,6 +189,7 @@ Résumé des règles implémentées.
       - should_not_authorize_femelle_deces
   * GeniteurApplicationITTests
       - whenPostRequestAndValidGeniteurAndLiceDeces_thenCorrectReponse
+  * [TODO] : si date de décès non renseignée dans le LOF, il faut aller de tenter la lire chez ICad
 * Contrôle du nombre maximum de portées autorisées pour la femelle
   * GeniteurUseCase
       - Level : Error
@@ -198,6 +199,7 @@ Résumé des règles implémentées.
       - should_not_authorize_lice_portees
   * GeniteurApplicationITTests
       - [TODO]
+  * NOTE : N/A s/ ReglementGeniteur2001    
 * Alerte s/ le maximum de portées autorisées pour la femelle
   * GeniteurUseCase
       - Level : Warning
@@ -207,6 +209,7 @@ Résumé des règles implémentées.
       - should_warning_lice_portees
   * GeniteurApplicationITTests
       - [TODO] 
+  * NOTE : N/A s/ ReglementGeniteur2001    
 * Contrôle du type d'inscription
   * GeniteurUseCase
       - Level : Error
@@ -234,6 +237,7 @@ Résumé des règles implémentées.
       - should_not_authorize_age_minimum
   * GeniteurApplicationITTests
       - whenPostRequestAndValidGeniteurAndTropJeune_thenCorrectReponse
+  * [TODO] Hack s/ race Teckel + Staff pour le mâle
 * Contrôle la lice ne doit pas être âgée de plus de 9 mois
   * GeniteurUseCase
       - Level : Error
@@ -243,6 +247,7 @@ Résumé des règles implémentées.
       - should_not_authorize_lice_age_maximum
   * GeniteurApplicationITTests
       - whenPostRequestAndValidGeniteurAndTropAgee_thenCorrectReponse
+  * NOTE : N/A s/ ReglementGeniteur2001    
 * Contrôle la lice n'a pas fait de saillie depuis 5 mois
   * GeniteurUseCase
       - Level : Error
@@ -316,6 +321,7 @@ Résumé des règles implémentées.
       - should_not_authorize_genealogie_complete
   * GeniteurApplicationITTests
       - whenPostRequestAndValidGenealogieIncomplete_thenCorrectReponse
+  * [TODO] cas du mâle ETRANGER et/ou de la femelle IMPORT
 * Contrôle de l'enregistrement d'une généalogie complète (généalogie à Titre initial)
   * GeniteurUseCase
       - Level : Info
@@ -334,6 +340,7 @@ Résumé des règles implémentées.
       - should_not_authorize_empreinte_adn
   * GeniteurApplicationITTests
       - whenPostRequestAndValidMissingEmpreinteAdn_thenCorrectReponse
+  * NOTE : N/A s/ ReglementGeniteur2001, ReglementGeniteur2020
 
 
 Note : règles d'exception d'un géniteur non confirmé
@@ -356,5 +363,6 @@ Création d'un référentiel pour les messages via la class `MESSAGE_APPLICATION
 ### branch feature/step11
 
 Implémenter une réglementation spécifique selon la date de saillie (décisions commission elevage)
-* Création d'une réglementation pour le `geniteur` via la classe `ReglementationFactory`
-Cette classe permet d'appliquer les nouvelles réglements de la commision élevage
+* Création d'une réglementation pour le `geniteur` via la classe `ReglementationFactory`\
+Cette classe permet d'appliquer les nouveaux réglements de la commision élevage.\
+Aujourd'hui côté géniteur, il n'existe qu'une seule réglementation en activité.

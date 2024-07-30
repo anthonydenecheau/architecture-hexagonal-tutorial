@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Locale;
 
 import fr.scc.saillie.geniteur.config.geniteur.IReglementationGeniteur;
+import fr.scc.saillie.geniteur.config.geniteur.ReglementGeniteur2001;
+import fr.scc.saillie.geniteur.config.geniteur.ReglementGeniteur2020;
 import fr.scc.saillie.geniteur.config.geniteur.ReglementGeniteurDefault;
 import fr.scc.saillie.geniteur.error.ConfigException;
-import fr.scc.saillie.geniteur.error.GeniteurException;
 
 import static java.util.Arrays.asList;
 
@@ -24,7 +25,7 @@ public class ReglementationFactory {
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.FRENCH);
 
     /** 
-     * Recherche de la règlementation spécifiques aux règles de la commission élevage à une date donnée
+     * Recherche de la règlementation spécifique aux règles de la commission élevage à une date donnée
      * @param dateReference date de référence pour la règlementation 
      * @return IReglementationGeniteur Règlementation {@link fr.scc.saillie.geniteur.config.geniteur.IReglementationGeniteur}
      * @throws Exception
@@ -35,6 +36,12 @@ public class ReglementationFactory {
             int cmdPatternCode = lireReglementationGeniteur(dateReference);
             switch (cmdPatternCode) {
                 case 0:
+                    businessCmd = new ReglementGeniteur2001();
+                    break;
+                case 1:
+                    businessCmd = new ReglementGeniteur2020();
+                    break;
+                case 2:
                     businessCmd = new ReglementGeniteurDefault();
                     break;
                 default:
@@ -55,7 +62,9 @@ public class ReglementationFactory {
     private static int lireReglementationGeniteur(LocalDate dateReference) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
         List<Reglement> reglements = asList(
-                new Reglement(0, ConvertStringToLocalDate("01/01/2001"), ConvertStringToLocalDate("31/12/9999"))
+                new Reglement(0, ConvertStringToLocalDate("01/01/2001"), ConvertStringToLocalDate("31/12/2019")),
+                new Reglement(1, ConvertStringToLocalDate("01/01/2020"), ConvertStringToLocalDate("03/09/2023")),
+                new Reglement(2, ConvertStringToLocalDate("04/09/2023"), ConvertStringToLocalDate("31/12/9999"))
         );
         // select the reglement based on the dateReference  provided
         for (Reglement reglement : reglements) {
