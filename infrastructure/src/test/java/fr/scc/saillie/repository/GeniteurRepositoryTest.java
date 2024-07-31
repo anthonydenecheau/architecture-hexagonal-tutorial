@@ -9,19 +9,14 @@ import fr.scc.saillie.geniteur.model.Confirmation;
 import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.model.SEXE;
 import fr.scc.saillie.geniteur.model.TYPE_INSCRIPTION;
+import fr.scc.saillie.geniteur.utils.DateUtils;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-
 @SpringBootTest
 public class GeniteurRepositoryTest {
-
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.FRENCH);
 
     @Autowired
     GeniteurRepository geniteurRepository;
@@ -30,9 +25,9 @@ public class GeniteurRepositoryTest {
     public void should_read_geniteur_byId() throws Exception {
         //Given
         Integer idGeniteur = 1;
-        Confirmation confirmation = new Confirmation(202300001, 1,  LocalDate.parse("01/01/2023", formatter), true, false, false);
+        Confirmation confirmation = new Confirmation(202300001, 1,  DateUtils.convertStringToLocalDate("01/01/2023"), true, false, false);
         //When
-        Geniteur geniteur = new Geniteur(1, 56, LocalDate.parse("01/01/2022", formatter), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, confirmation, asList(), asList(), true, true);
+        Geniteur geniteur = new Geniteur(1, 56, DateUtils.convertStringToLocalDate("01/01/2022"), null, TYPE_INSCRIPTION.DESCENDANCE, SEXE.FEMELLE, confirmation, asList(), asList(), true, true);
         //Then
         assertThat(geniteurRepository.byId(idGeniteur)).isEqualTo(geniteur);
     }    

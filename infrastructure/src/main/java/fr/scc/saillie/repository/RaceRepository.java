@@ -22,6 +22,7 @@ public class RaceRepository implements RaceInventory {
     public Race byId(Integer id) throws GeniteurException {
         Race race = null;
         String sql = "SELECT r.IDENT_RRACE " +
+            " , r.NOM_RACE_FRANCAIS " +
             " , TO_CHAR(r.DATE_DEROGATION_ADN,'DD/MM/YYYY') DATE_DEROGATION_ADN " +
             " , r.NB_AGE_MINI_CONFIRMATION " +
             " FROM RRACE r " +
@@ -32,13 +33,13 @@ public class RaceRepository implements RaceInventory {
         } catch (EmptyResultDataAccessException e) {
             throw new GeniteurException("Aucune race trouvée pour le chien : " + id);
         } catch (Exception e) {
-            throw new GeniteurException("Erreur technique [byId] : " + e.getMessage());
+            throw new GeniteurException("RaceRepository Erreur technique [byId] : " + e.getMessage());
         }
         return race;
     }
 
     public Race Step6_byGeniteurId(Integer id) throws GeniteurException {
-        return new Race(56, null, 12);
+        return new Race(56, "AKITA", null, 12);
     }
 
 }

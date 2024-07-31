@@ -12,6 +12,7 @@ import fr.scc.saillie.geniteur.config.geniteur.ReglementGeniteur2001;
 import fr.scc.saillie.geniteur.config.geniteur.ReglementGeniteur2020;
 import fr.scc.saillie.geniteur.config.geniteur.ReglementGeniteur2023;
 import fr.scc.saillie.geniteur.error.ConfigException;
+import fr.scc.saillie.geniteur.utils.DateUtils;
 
 import static java.util.Arrays.asList;
 
@@ -21,8 +22,6 @@ import static java.util.Arrays.asList;
  * @author anthonydenecheau
  */
 public class ReglementationFactory {
-
-    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.FRENCH);
 
     /** 
      * Recherche de la règlementation spécifique aux règles de la commission élevage à une date donnée
@@ -60,11 +59,10 @@ public class ReglementationFactory {
      * @throws ParseException
      */    
     private static int lireReglementationGeniteur(LocalDate dateReference) throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
         List<Reglement> reglements = asList(
-                new Reglement(0, ConvertStringToLocalDate("01/01/2001"), ConvertStringToLocalDate("31/12/2019")),
-                new Reglement(1, ConvertStringToLocalDate("01/01/2020"), ConvertStringToLocalDate("03/09/2023")),
-                new Reglement(2, ConvertStringToLocalDate("04/09/2023"), ConvertStringToLocalDate("31/12/9999"))
+                new Reglement(0, DateUtils.convertStringToLocalDate("01/01/2001"), DateUtils.convertStringToLocalDate("31/12/2019")),
+                new Reglement(1, DateUtils.convertStringToLocalDate("01/01/2020"), DateUtils.convertStringToLocalDate("03/09/2023")),
+                new Reglement(2, DateUtils.convertStringToLocalDate("04/09/2023"), DateUtils.convertStringToLocalDate("31/12/9999"))
         );
         // select the reglement based on the dateReference  provided
         for (Reglement reglement : reglements) {
@@ -75,14 +73,6 @@ public class ReglementationFactory {
         return -1;
     }
     
-    private static LocalDate ConvertStringToLocalDate(String val) {
-        try {
-            return LocalDate.parse(val, formatter);
-        } catch (Exception e) {
-            return null;
-        }
-    } 
-
     /**
     * Reglement
     *

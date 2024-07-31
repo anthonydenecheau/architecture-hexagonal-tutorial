@@ -17,6 +17,7 @@ import fr.scc.saillie.geniteur.api.ValidateGeniteur;
 import fr.scc.saillie.geniteur.error.GeniteurException;
 import fr.scc.saillie.geniteur.model.LEVEL;
 import fr.scc.saillie.geniteur.model.Message;
+import fr.scc.saillie.geniteur.utils.DateUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -55,7 +56,7 @@ public class GeniteurController {
             
             messages = validateGeniteur.execute(
                 geniteurRequest.getIdEleveur()
-                , GeniteurRequest.convertStringToDate(geniteurRequest.getDateSaillie())
+                , DateUtils.convertStringToLocalDate(geniteurRequest.getDateSaillie())
                 , GeniteurRequest.convertToEntity(geniteurRequest))
             ;
             

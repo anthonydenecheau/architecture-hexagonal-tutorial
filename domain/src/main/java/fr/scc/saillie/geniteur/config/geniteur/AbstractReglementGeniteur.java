@@ -11,6 +11,7 @@ import fr.scc.saillie.geniteur.model.MESSAGE_APPLICATION;
 import fr.scc.saillie.geniteur.model.Message;
 import fr.scc.saillie.geniteur.model.PROFIL;
 import fr.scc.saillie.geniteur.model.Personne;
+import fr.scc.saillie.geniteur.model.Race;
 import fr.scc.saillie.geniteur.spi.AdnInventory;
 import fr.scc.saillie.geniteur.spi.GeniteurInventory;
 import fr.scc.saillie.geniteur.spi.PersonneInventory;
@@ -32,6 +33,7 @@ public abstract class AbstractReglementGeniteur implements IReglementationGenite
             
             // Lecture des informations du géniteur
             Geniteur _g = geniteurInventory.byId(geniteur.getId());
+            Race _r = raceInventory.byId(_g.getIdRace());
 
             // Contrôle que le sexe annoncé est correct
             if (!geniteur.getSexe().equals(_g.getSexe())) {
@@ -67,7 +69,7 @@ public abstract class AbstractReglementGeniteur implements IReglementationGenite
                 messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_DATE_NAISSANCE.code,MESSAGE_APPLICATION.GENITEUR_DATE_NAISSANCE.message));
                 return messages;
             }
-            if (!_g.hasAgeMinimumToReproduce(dateSaillie, raceInventory.byId(_g.getIdRace()).ageMinimum())) {
+            if (!hasAgeMinimumToReproduce(_g, dateSaillie, _r.nom(), _r.ageMinimum())) {
                 messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_TROP_JEUNE.code,MESSAGE_APPLICATION.GENITEUR_TROP_JEUNE.message));
                 return messages;
             }
@@ -122,7 +124,7 @@ public abstract class AbstractReglementGeniteur implements IReglementationGenite
             }
 
             // Controle que l'empreinte ADN du géniteur est enregistrée
-            if (!hasValidProfileAdn(_g, dateSaillie, raceInventory.byId(_g.getIdRace()).dateDerogationAdn(), adnInventory.isCommandeAdnEnCours(_g.getId()))) {
+            if (!hasValidProfileAdn(_g, dateSaillie, _r.dateDerogationAdn(), adnInventory.isCommandeAdnEnCours(_g.getId()))) {
                 messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_EMPREINTE.code,MESSAGE_APPLICATION.GENITEUR_EMPREINTE.message));
                 return messages;
             }
@@ -168,4 +170,14 @@ public abstract class AbstractReglementGeniteur implements IReglementationGenite
      * @return boolean 
      */      
     protected abstract boolean isTooOldToReproduce(Geniteur geniteur, LocalDate dateSaillie);
+
+    /** 
+     * Règle s/ le contrôle de l'âge minimum pour la lice depuis le 01/01/2020
+     * @param Geniteur geniteur 
+     * @param LocaleDate dateSaillie 
+     * @param String nom de la race 
+     * @param int âge minimum définie s/ la race 
+     * @return boolean 
+     */    
+    protected abstract boolean hasAgeMinimumToReproduce(Geniteur geniteur, LocalDate dateSaillie, String race, int ageMinimum);
 }

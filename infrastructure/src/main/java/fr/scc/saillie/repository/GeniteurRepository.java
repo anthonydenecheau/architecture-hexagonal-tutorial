@@ -69,7 +69,7 @@ public class GeniteurRepository implements GeniteurInventory {
         } catch (EmptyResultDataAccessException e) {
             throw new GeniteurException("Aucun géniteur trouvé pour le chien : " + id);
         } catch (Exception e) {
-            throw new GeniteurException("Erreur technique [byId] : " + e.getMessage());
+            throw new GeniteurException("GeniteurRepository Erreur technique [byId] : " + e.getMessage());
         }
         return geniteur;
 
