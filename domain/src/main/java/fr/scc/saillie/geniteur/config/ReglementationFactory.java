@@ -10,7 +10,7 @@ import java.util.Locale;
 import fr.scc.saillie.geniteur.config.geniteur.IReglementationGeniteur;
 import fr.scc.saillie.geniteur.config.geniteur.ReglementGeniteur2001;
 import fr.scc.saillie.geniteur.config.geniteur.ReglementGeniteur2020;
-import fr.scc.saillie.geniteur.config.geniteur.ReglementGeniteurDefault;
+import fr.scc.saillie.geniteur.config.geniteur.ReglementGeniteur2023;
 import fr.scc.saillie.geniteur.error.ConfigException;
 
 import static java.util.Arrays.asList;
@@ -42,7 +42,7 @@ public class ReglementationFactory {
                     businessCmd = new ReglementGeniteur2020();
                     break;
                 case 2:
-                    businessCmd = new ReglementGeniteurDefault();
+                    businessCmd = new ReglementGeniteur2023();
                     break;
                 default:
                     throw new ConfigException("Aucun reglement geniteur trouvé pour la date de saillie fournie");

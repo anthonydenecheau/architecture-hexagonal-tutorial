@@ -16,21 +16,13 @@ import fr.scc.saillie.geniteur.spi.GeniteurInventory;
 import fr.scc.saillie.geniteur.spi.PersonneInventory;
 import fr.scc.saillie.geniteur.spi.RaceInventory;
 
-/**
- * ReglementGeniteurDefault : règlement par défaut
- *
- * @author anthonydenecheau
- */
-public class ReglementGeniteurDefault implements IReglementationGeniteur {
+public abstract class AbstractReglementGeniteur implements IReglementationGeniteur {
 
-    /** 
-     * @see {@link fr.scc.saillie.geniteur.GeniteurUseCase} 
-     */
+    List<Message> messages = new ArrayList<Message>();
+
     @Override
     public List<Message> execute(int idEleveur, LocalDate dateSaillie, Geniteur geniteur, PersonneInventory personneInventory, GeniteurInventory geniteurInventory, RaceInventory raceInventory, AdnInventory adnInventory) throws GeniteurException {
         
-        List<Message> messages = new ArrayList<Message>();
-
         try {
             Personne eleveur = personneInventory.byId(idEleveur, PROFIL.ELEVEUR);
             if (eleveur.hasLitige(dateSaillie)) {
@@ -54,13 +46,13 @@ public class ReglementGeniteurDefault implements IReglementationGeniteur {
             }
 
             // Contrôle du nombre maximum de portées autorisées pour la femelle
-            if (_g.hasReachedMaxPortee()) {
+            if (hasReachedMaxPortee(_g)) {
                 messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_MAX_PORTEES.code,MESSAGE_APPLICATION.GENITEUR_MAX_PORTEES.code));
                 return messages;
             }
 
             // Alerte s/ le nombre maximum de portées autorisées pour la femelle
-            if (_g.isClosedToReachedMaxPortee()) {
+            if (isClosedToReachedMaxPortee(_g)) {
                 messages.add(new Message(LEVEL.WARNING,MESSAGE_APPLICATION.GENITEUR_ALERTE_PORTEES.code,MESSAGE_APPLICATION.GENITEUR_ALERTE_PORTEES.message));
             }
             
@@ -79,7 +71,7 @@ public class ReglementGeniteurDefault implements IReglementationGeniteur {
                 messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_TROP_JEUNE.code,MESSAGE_APPLICATION.GENITEUR_TROP_JEUNE.message));
                 return messages;
             }
-            if (_g.isTooOldToReproduce(dateSaillie)) {
+            if (isTooOldToReproduce(_g, dateSaillie)) {
                 messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_TROP_AGE.code,MESSAGE_APPLICATION.GENITEUR_TROP_AGE.message));
                 return messages;
             }
@@ -130,11 +122,11 @@ public class ReglementGeniteurDefault implements IReglementationGeniteur {
             }
 
             // Controle que l'empreinte ADN du géniteur est enregistrée
-            if (!_g.hasValidProfileAdn(dateSaillie, raceInventory.byId(_g.getIdRace()).dateDerogationAdn(), adnInventory.isCommandeAdnEnCours(_g.getId()))) {
+            if (!hasValidProfileAdn(_g, dateSaillie, raceInventory.byId(_g.getIdRace()).dateDerogationAdn(), adnInventory.isCommandeAdnEnCours(_g.getId()))) {
                 messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_EMPREINTE.code,MESSAGE_APPLICATION.GENITEUR_EMPREINTE.message));
                 return messages;
             }
-            
+
             // Validation OK
             messages.add(new Message(LEVEL.INFO,MESSAGE_APPLICATION.VALIDE.code,MESSAGE_APPLICATION.VALIDE.message));
 
@@ -145,4 +137,35 @@ public class ReglementGeniteurDefault implements IReglementationGeniteur {
         return messages;    
     }
 
+    /** 
+     * Règle s/ le contrôle de l'enregistrement d'une empreinte depuis le 04/09/2023
+     * @param Geniteur geniteur 
+     * @param LocalDate date de saillie  
+     * @param LocalDate date de dérogation Adn pour la race du géniteur
+     * @param boolean commande Adn en cours pour le géniteur
+     * @return boolean 
+     */      
+    protected abstract boolean hasValidProfileAdn(Geniteur geniteur, LocalDate dateSaillie, LocalDate dateDerogationAdn, boolean isCommmandeAdnEnCours);
+
+    /** 
+     * Règle s/ le contrôle des portées de la lice depuis le 01/01/2020
+     * @param Geniteur geniteur 
+     * @return boolean 
+     */      
+    protected abstract boolean hasReachedMaxPortee(Geniteur geniteur);
+
+    /** 
+     * Règle s/ le contrôle des portées de la lice depuis le 01/01/2020
+     * @param Geniteur geniteur 
+     * @return boolean 
+     */      
+    protected abstract boolean isClosedToReachedMaxPortee(Geniteur geniteur);
+
+    /** 
+     * Règle s/ le contrôle de l'âge maximum pour la lice depuis le 01/01/2020
+     * @param Geniteur geniteur 
+     * @param LocaleDate dateSaillie 
+     * @return boolean 
+     */      
+    protected abstract boolean isTooOldToReproduce(Geniteur geniteur, LocalDate dateSaillie);
 }

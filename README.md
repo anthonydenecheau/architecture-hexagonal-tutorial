@@ -363,6 +363,11 @@ Création d'un référentiel pour les messages via la class `MESSAGE_APPLICATION
 ### branch feature/step11
 
 Implémenter une réglementation spécifique selon la date de saillie (décisions commission elevage)
-* Création d'une réglementation pour le `geniteur` via la classe `ReglementationFactory`\
+
+* Focus s/ la classe `ReglementationFactory`\
 Cette classe permet d'appliquer les nouveaux réglements de la commision élevage.\
-Aujourd'hui côté géniteur, il n'existe qu'une seule réglementation en activité.
+La classe `AbstractReglementGeniteur` regroupe le tronc commun de l'ensemble des reglementations.\
+Selon la règlementation qui doit être appliquée, certaines règles ne seront pas implémentées.\
+Par exemple, le contrôle sur l'enregistrement obligatoire de l'empreinte Adn du géniteur dans le LOF n'est valable que pour la règlementation du 04/09/2023.\
+En conséquence, une méthode abstraite `hasValidProfileAdn` a été créée et celle-ci ne sera implémentée que pour cette réglementation. 
+

@@ -4,17 +4,15 @@ import java.time.LocalDate;
 import fr.scc.saillie.geniteur.model.Geniteur;
 
 /**
- * ReglementGeniteurDefault : règlement par défaut
+ * ReglementGeniteur2023 : règlement en cours
  *
  * @author anthonydenecheau
  */
-public class ReglementGeniteur2020 extends AbstractReglementGeniteur {
+public class ReglementGeniteur2023 extends AbstractReglementGeniteur {
 
     @Override
-    protected boolean hasValidProfileAdn(Geniteur geniteur, LocalDate dateSaillie, LocalDate dateDerogationAdn,
-            boolean isCommmandeAdnEnCours) {
-        // le contrôle n'est pas effectué dans ce contexte
-        return true;
+    protected boolean hasValidProfileAdn(Geniteur geniteur, LocalDate dateSaillie, LocalDate dateDerogationAdn, boolean isCommmandeAdnEnCours) {
+        return geniteur.hasValidProfileAdn(dateSaillie, dateDerogationAdn, isCommmandeAdnEnCours);
     }
 
     @Override
@@ -31,4 +29,5 @@ public class ReglementGeniteur2020 extends AbstractReglementGeniteur {
     protected boolean isTooOldToReproduce(Geniteur geniteur, LocalDate dateSaillie) {
         return geniteur.isTooOldToReproduce(dateSaillie);
     }    
+
 }
