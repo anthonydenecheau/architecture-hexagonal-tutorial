@@ -2,9 +2,13 @@ package fr.scc.saillie.geniteur.model;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
+
+import fr.scc.saillie.geniteur.utils.DateUtils;
 
 /**
  * Classe geniteur
@@ -68,6 +72,10 @@ public class Geniteur  {
         return idRace;
     }
 
+    public LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
     public Confirmation getConfirmation() {
         return confirmation;
     }
@@ -91,6 +99,7 @@ public class Geniteur  {
     private static final int MAX_AGE_LICE_POUR_SAILLIE_EN_ANNEES = 9;
     private static final int DELAI_AUTORISE = 5;
     private static final int MAX_PORTEES = 8;
+    public  static final int MIN_AGE_LICE_EN_MOIS = 15;
 
     /** 
      * <p>la lice n'a pas déclarée de nouvelle saillie depuis 5 mois</p>
@@ -107,8 +116,8 @@ public class Geniteur  {
                 .map( p ->p.dateSaillie())
                 .collect(Collectors.toList())
             ;
-            LocalDate dateDerniereSaillie = getMostRecentBeforeDate(LocalDate.now(), datesSaillie);
-            return getMonthsBetween(dateDerniereSaillie, dateSaillie) >= DELAI_AUTORISE;
+            LocalDate dateDerniereSaillie = DateUtils.getMostRecentBeforeDate(LocalDate.now(), datesSaillie);
+            return DateUtils.getMonthsBetween(dateDerniereSaillie, dateSaillie) >= DELAI_AUTORISE;
 
         } else
             return true;
@@ -155,20 +164,9 @@ public class Geniteur  {
      */
     public boolean isTooOldToReproduce(LocalDate dateSaillie) {
         if (SEXE.FEMELLE.equals(this.sexe))
-            return getMonthsBetween(this.dateNaissance, dateSaillie) >= MAX_AGE_LICE_POUR_SAILLIE_EN_ANNEES * 12;
+            return DateUtils.getMonthsBetween(this.dateNaissance, dateSaillie) >= MAX_AGE_LICE_POUR_SAILLIE_EN_ANNEES * 12;
         else
             return false;
-    }
-
-    /** 
-     * <p>le géniteur a bien l'âge requis pour effectuer une saillie</p>
-     * @see #getMonthsBetween(LocalDate,LocalDate)
-     * @param dateSaillie date de saillie
-     * @param ageMinimum age minimum requis
-     * @return boolean
-     */
-    public boolean hasAgeMinimumToReproduce(LocalDate dateSaillie, int ageMinimum) {
-        return getMonthsBetween(dateNaissance, dateSaillie) > ageMinimum;
     }
 
     /** 
@@ -194,28 +192,6 @@ public class Geniteur  {
             return true;
             
         return false;
-    }
-
-    /** 
-     * <p>le nombre de mois séparant 2 dates</p>
-     * @param fromDate
-     * @param toDate
-     * @return long
-     */
-    private long getMonthsBetween(LocalDate fromDate, LocalDate toDate) {
-        return ChronoUnit.MONTHS.between(YearMonth.from(fromDate), YearMonth.from(toDate));
-    }
-
-    /** 
-     * <p>extraction de la date la plus récente</p>
-     * @param targetDate
-     * @param dateList
-     * @return long
-     */
-    private static LocalDate getMostRecentBeforeDate(LocalDate targetDate, List<LocalDate> dateList) {
-        // we filter the list so that only dates which are "older" than our targeted date remain
-        // then we get the most recent date by using compareTo method from LocalDate class and we return that date
-        return dateList.stream().filter(date -> date.isBefore(targetDate)).max(LocalDate::compareTo).get();
     }
 
     /** 

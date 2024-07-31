@@ -14,12 +14,12 @@ import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.model.SEXE;
 import fr.scc.saillie.geniteur.model.TYPE_INSCRIPTION;
 import fr.scc.saillie.geniteur.spi.GeniteurInventory;
+import fr.scc.saillie.geniteur.utils.DateUtils;
 
 @Stub
 public class GeniteurInventoryStub implements GeniteurInventory {
 
     private static final Geniteur DEFAULT_GENITEUR;
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.FRENCH);
     
     static {
         try {
@@ -43,11 +43,11 @@ public class GeniteurInventoryStub implements GeniteurInventory {
         return new Geniteur(
             1
             , 56
-            , LocalDate.parse("01/01/2022", formatter)
+            , DateUtils.convertStringToLocalDate("01/01/2022")
             , null 
             , TYPE_INSCRIPTION.DESCENDANCE 
             , SEXE.FEMELLE
-            , new Confirmation(202000001, 1235, LocalDate.parse("01/02/2023", formatter), true, false, false)
+            , new Confirmation(202000001, 1235, DateUtils.convertStringToLocalDate("01/02/2023"), true, false, false)
             , asList()
             , asList()
             , true

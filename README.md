@@ -237,7 +237,6 @@ Résumé des règles implémentées.
       - should_not_authorize_age_minimum
   * GeniteurApplicationITTests
       - whenPostRequestAndValidGeniteurAndTropJeune_thenCorrectReponse
-  * [TODO] Hack s/ race Teckel + Staff pour le mâle
 * Contrôle la lice ne doit pas être âgée de plus de 9 mois
   * GeniteurUseCase
       - Level : Error

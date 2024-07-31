@@ -60,7 +60,7 @@ public class PersonneRepository implements PersonneInventory {
             if (!profil.equals(PROFIL.PROPRIETAIRE))
                 throw new GeniteurException("Aucune personne trouvée pour : " + id);
         } catch (Exception e) {
-            throw new GeniteurException("Erreur technique [byId] : " + e.getMessage());
+            throw new GeniteurException("PersonneRepository Erreur technique [byId] : " + e.getMessage());
         }
         return personne;
     }

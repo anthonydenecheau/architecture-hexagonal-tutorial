@@ -7,6 +7,6 @@ import java.time.LocalDate;
  *
  * @author anthonydenecheau
  */
-public record Race(Integer id, LocalDate dateDerogationAdn, Integer ageMinimum) {
+public record Race(Integer id, String nom, LocalDate dateDerogationAdn, Integer ageMinimum) {
 
 }

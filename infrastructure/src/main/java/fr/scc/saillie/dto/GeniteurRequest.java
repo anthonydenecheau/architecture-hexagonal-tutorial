@@ -1,9 +1,5 @@
 package fr.scc.saillie.dto;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-
 import fr.scc.saillie.geniteur.model.Geniteur;
 import fr.scc.saillie.geniteur.model.SEXE;
 import fr.scc.saillie.validator.CheckDateFormat;
@@ -40,9 +36,4 @@ public class GeniteurRequest {
             , SEXE.valueOf(geniteurRequest.getSexe()));
     }
 
-    public static LocalDate convertStringToDate(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.FRENCH);        
-        if ("".equals(date) || date == null) return null;
-        return LocalDate.parse(date, formatter);
-    }
 }

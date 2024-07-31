@@ -22,7 +22,7 @@ public class RaceRepositoryTest {
         //Given
         Integer idRace = 56;
         //When
-        Race race = new Race(56, null, 12);
+        Race race = new Race(56, "AKITA", null, 12);
         //Then
         assertThat(raceRepository.byId(idRace)).isEqualTo(race);
     }    
