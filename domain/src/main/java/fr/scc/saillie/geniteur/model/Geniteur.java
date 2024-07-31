@@ -76,6 +76,10 @@ public class Geniteur  {
         return dateNaissance;
     }
 
+    public TYPE_INSCRIPTION getTypeInscription() {
+        return typeInscription;
+    }
+
     public Confirmation getConfirmation() {
         return confirmation;
     }

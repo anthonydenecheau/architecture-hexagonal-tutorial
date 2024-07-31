@@ -84,6 +84,9 @@ public class GeniteurApplicationITTests {
     @Value("classpath:__files/payloads/geniteur-genealogie-complete-titre-initial.json")
     private Resource geniteur_genealogie_complete_titre_initial;
 
+    @Value("classpath:__files/payloads/geniteur-genealogie-complete-lice-import.json")
+    private Resource geniteur_genealogie_complete_lice_import;
+
     @Test
     @DisplayName("Step8")
     public void whenPostRequestAndMissingDateSaillie_thenCorrectReponse() throws Exception {
@@ -257,6 +260,18 @@ public class GeniteurApplicationITTests {
     public void whenPostRequestAndValidGenealogieTitreInitial_thenCorrectReponse() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
                 .content(asString(geniteur_genealogie_complete_titre_initial))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.VALIDE.message))))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+                ;
+    } 
+
+    @Test
+    @DisplayName("Step9")
+    public void whenPostRequestAndValidGenealogieLiceImport_thenCorrectReponse() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/validateGeniteur")
+                .content(asString(geniteur_genealogie_complete_lice_import))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].message", Matchers.anyOf(Matchers.containsString(MESSAGE_APPLICATION.VALIDE.message))))
