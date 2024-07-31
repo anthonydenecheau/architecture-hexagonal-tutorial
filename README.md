@@ -320,7 +320,6 @@ Résumé des règles implémentées.
       - should_not_authorize_genealogie_complete
   * GeniteurApplicationITTests
       - whenPostRequestAndValidGenealogieIncomplete_thenCorrectReponse
-  * [TODO] cas du mâle ETRANGER et/ou de la femelle IMPORT
 * Contrôle de l'enregistrement d'une généalogie complète (généalogie à Titre initial)
   * GeniteurUseCase
       - Level : Info
@@ -330,6 +329,7 @@ Résumé des règles implémentées.
       - N/A
   * GeniteurApplicationITTests
       - whenPostRequestAndValidGenealogieTitreInitial_thenCorrectReponse
+      - whenPostRequestAndValidGenealogieLiceImport_thenCorrectReponse
 * Contrôle de l'enregistrement empreinte ADN
   * GeniteurUseCase
       - Level : Error

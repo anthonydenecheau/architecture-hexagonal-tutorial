@@ -47,6 +47,7 @@ public class GeniteurRepository implements GeniteurInventory {
             "       WHEN 540 THEN 'ETRANGER' " +
             "       WHEN 539 THEN 'A_TITRE_INITIAL' " +
             "       WHEN 890 THEN 'PROVISOIRE' " +
+            "       WHEN 538 THEN 'IMPORT' " +
             "       ELSE '' " +
             " END AS TYPE_INSCRIPTION " +
             " , DECODE(c.ON_SEXE_MALE,'O','MALE','FEMELLE') SEXE " +
@@ -63,7 +64,7 @@ public class GeniteurRepository implements GeniteurInventory {
             geniteur = jdbcTemplate.queryForObject(sql, new GeniteurMapper(), new Object[]{(Object) id});
             geniteur.withPortees(lirePorteesById(id));
             geniteur.withLitiges(lireLitigesById(id));
-            geniteur.setGenealogieComplete(lireGenealogieById(id));
+            geniteur.setGenealogieComplete(lireGenealogieById(id, geniteur.getTypeInscription()));
             geniteur.setEmpreinteAdn(lireEmpreinteAdnById(id));
             
         } catch (EmptyResultDataAccessException e) {
@@ -152,13 +153,13 @@ public class GeniteurRepository implements GeniteurInventory {
         }
     }
 
-    public boolean lireGenealogieById(Integer id) throws GeniteurException {
+    public boolean lireGenealogieById(Integer id, TYPE_INSCRIPTION typeInscription) throws GeniteurException {
         Genealogie genealogie = new Genealogie(id, null);
-        initialiserGenealogie(genealogie, 1);
+        initialiserGenealogie(genealogie, typeInscription, 1);
         return genealogie != null && genealogie.getPere() != null && genealogie.getMere() != null && genealogie.getPere().getPere() != null && genealogie.getPere().getMere() != null && genealogie.getMere().getPere() != null && genealogie.getMere().getMere() != null;
     }
 
-    private void initialiserGenealogie(Genealogie sujet, int level) {
+    private void initialiserGenealogie(Genealogie sujet, TYPE_INSCRIPTION typeInscriptionSujet, int level) {
 
         int idSujet = sujet.getId();
         Genealogie pere = null;
@@ -172,11 +173,13 @@ public class GeniteurRepository implements GeniteurInventory {
             "       WHEN 540 THEN 'ETRANGER' " +
             "       WHEN 539 THEN 'A_TITRE_INITIAL' " +
             "       WHEN 890 THEN 'PROVISOIRE' " +
+            "       WHEN 538 THEN 'IMPORT' " +
             "       ELSE '' " +
             " END AS TYPE_INSCRIPTION " +
-            " , c.IDENT_RRACE, ON_SEXE_MALE " +
-            " , c.IDENT_RCHIEN_PERE " +
-            " , c.IDENT_RCHIEN_MERE " +
+            " , c.IDENT_RRACE " +
+            " , DECODE(c.ON_SEXE_MALE,'O','MALE','FEMELLE') SEXE " +
+            " , NVL(c.IDENT_RCHIEN_PERE,0) IDENT_RCHIEN_PERE " +
+            " , NVL(c.IDENT_RCHIEN_MERE,0) IDENT_RCHIEN_MERE " +
             " FROM RCHIEN c " + 
             " WHERE c.IDENT_RCHIEN = ? "
         ;
@@ -189,29 +192,37 @@ public class GeniteurRepository implements GeniteurInventory {
                         int idMere = 0;
                         while (rs.next()) {
                             String nom = rs.getString("NOM_CHIEN");
-                            TYPE_INSCRIPTION typ_inscription = TYPE_INSCRIPTION.valueOf(rs.getString("TYPE_INSCRIPTION"));
-                            String sexe = rs.getString("ON_SEXE_MALE");
+                            TYPE_INSCRIPTION typeInscriptionFils = TYPE_INSCRIPTION.valueOf(rs.getString("TYPE_INSCRIPTION"));
+                            SEXE sexe = SEXE.valueOf(rs.getString("SEXE"));
                             Integer idRace = rs.getInt("IDENT_RRACE");
                             // Cas particulier de la généalogie
                             if ("CHIEN NON INSCRIT AUX LIVRES DES ORIGINES".equals(nom)
-                                || TYPE_INSCRIPTION.A_TITRE_INITIAL.equals(typ_inscription)
-                                || TYPE_INSCRIPTION.LIVRE_ATTENTE.equals(typ_inscription)
+                                || TYPE_INSCRIPTION.A_TITRE_INITIAL.equals(typeInscriptionFils)
+                                || TYPE_INSCRIPTION.LIVRE_ATTENTE.equals(typeInscriptionFils)
                                 ) {
                                 // On simule le reste de la généalogie comme complète
                                 // On va rechercher pour la race l'étalon/la lice 
                                 // On doit avoir déjà ici l'un des deux !
-                                if ("O".equals(sexe)){
+                                if (SEXE.MALE.equals(sexe)){
                                     idPere = idSujet;
                                     // lire l'équivalent pour la femelle
                                     idMere = lireChienNonInscrit(SEXE.FEMELLE,idRace);
                                 }
-                                if ("N".equals(sexe)){
+                                if (SEXE.FEMELLE.equals(sexe)){
                                     idPere = lireChienNonInscrit(SEXE.MALE,idRace);
                                     idMere = idSujet;
                                 }
                             } else {
-                                idPere = rs.getInt("IDENT_RCHIEN_PERE");
-                                idMere = rs.getInt("IDENT_RCHIEN_MERE");
+                                // Si Mâle+ETRANGER Ou Femelle+IMPORT Alors on autorise l'absence des AGP
+                                if ( level == 3 && ((SEXE.MALE.equals(sexe) && TYPE_INSCRIPTION.ETRANGER.equals(typeInscriptionSujet))
+                                    || (SEXE.FEMELLE.equals(sexe) && TYPE_INSCRIPTION.IMPORT.equals(typeInscriptionSujet))) ) 
+                                {
+                                    idPere = (rs.getInt("IDENT_RCHIEN_PERE") == 0 ? lireChienNonInscrit(SEXE.MALE,idRace) : rs.getInt("IDENT_RCHIEN_PERE"));
+                                    idMere = (rs.getInt("IDENT_RCHIEN_MERE") == 0 ? lireChienNonInscrit(SEXE.FEMELLE,idRace) : rs.getInt("IDENT_RCHIEN_MERE"));
+                                } else {
+                                    idPere = rs.getInt("IDENT_RCHIEN_PERE");
+                                    idMere = rs.getInt("IDENT_RCHIEN_MERE");
+                                }
                             }
 
                             if (idPere != 0)
@@ -230,7 +241,7 @@ public class GeniteurRepository implements GeniteurInventory {
             pere.sexe = SEXE.MALE;
             sujet.setPere(pere);
             if (level <= 3) {
-                initialiserGenealogie(pere, level + 1);
+                initialiserGenealogie(pere, typeInscriptionSujet, level + 1);
             }
         }
         mere = geniteurs.stream().filter(g -> g.sexe == SEXE.FEMELLE).findFirst().orElse(null);
@@ -238,7 +249,7 @@ public class GeniteurRepository implements GeniteurInventory {
             mere.sexe = SEXE.FEMELLE;
             sujet.setMere(mere);
             if (level <= 3) {
-                initialiserGenealogie(mere, level + 1);
+                initialiserGenealogie(mere, typeInscriptionSujet, level + 1);
             }
         }
     }    
