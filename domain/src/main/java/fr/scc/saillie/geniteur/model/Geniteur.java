@@ -1,13 +1,10 @@
 package fr.scc.saillie.geniteur.model;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
+import fr.scc.saillie.geniteur.spi.IcadInventory;
 import fr.scc.saillie.geniteur.utils.DateUtils;
 
 /**
@@ -18,6 +15,8 @@ import fr.scc.saillie.geniteur.utils.DateUtils;
 public class Geniteur  {
     int id; 
     int idRace;
+    String tatouage;
+    String puce;
     LocalDate dateNaissance;
     LocalDate dateDeces;
     TYPE_INSCRIPTION typeInscription;
@@ -28,10 +27,12 @@ public class Geniteur  {
     boolean genealogieComplete;
     boolean empreinteAdn;
 
-    public Geniteur(int id, int idRace, LocalDate dateNaissance, LocalDate dateDeces, TYPE_INSCRIPTION typeInscription,
+    public Geniteur(int id, int idRace, String tatouage, String puce, LocalDate dateNaissance, LocalDate dateDeces, TYPE_INSCRIPTION typeInscription,
       SEXE sexe, Confirmation confirmation, List<Litige> litiges, List<Portee> portees, boolean genealogieComplete, boolean empreinteAdn) {
         this.id = id;
         this.idRace = idRace;
+        this.tatouage = tatouage;
+        this.puce = puce;
         this.dateNaissance = dateNaissance;
         this.dateDeces = dateDeces;
         this.typeInscription = typeInscription;
@@ -72,8 +73,24 @@ public class Geniteur  {
         return idRace;
     }
 
+    public String getTatouage() {
+        return tatouage;
+    }
+
+    public String getPuce() {
+        return puce;
+    }
+
     public LocalDate getDateNaissance() {
         return dateNaissance;
+    }
+
+    public LocalDate getDateDeces() {
+        return dateDeces;
+    }
+
+    public void setDateDeces(LocalDate dateDeces) {
+        this.dateDeces = dateDeces;
     }
 
     public TYPE_INSCRIPTION getTypeInscription() {
@@ -132,11 +149,18 @@ public class Geniteur  {
      * @param  dateSaillie date de saillie
      * @return boolean
      */
-    public boolean isAliveWhenSaillieHasBeenDone(LocalDate dateSaillie) {
+    public boolean isAliveWhenSaillieHasBeenDone(LocalDate dateSaillie, IcadInventory icadInventory) {
         if (SEXE.FEMELLE.equals(sexe)) {
-            if (dateDeces == null)
+            if (dateDeces == null) {
+                // appel Icad avec tatouage, puce
+                try {
+                    LocalDate _d = icadInventory.byIdentifiant(this.tatouage, this.puce).getDateDeces();
+                    return _d.isAfter(dateSaillie);
+                }  catch (Exception e) {
+                    ;
+                }
                 return true;
-            else {
+            } else {
                 return dateDeces.isAfter(dateSaillie);
             }
         } else

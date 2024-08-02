@@ -11,6 +11,8 @@ public final class DateUtils {
 
     private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.FRENCH);
 
+    private final static DateTimeFormatter formatterIcad = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.FRENCH);
+
     /** 
      * <p>le nombre de mois séparant 2 dates</p>
      * @param fromDate
@@ -45,4 +47,18 @@ public final class DateUtils {
             return null;
         }
     }
+
+    /** 
+     * <p>convertion du format date ICad en LocalDate (format : dd/MM/yyyy)</p>
+     * @param String date
+     * @return LocaleDate
+     */
+    public static LocalDate convertIcadStringToLocalDate(String date) {
+        try {
+            return LocalDate.parse(date, formatterIcad);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }

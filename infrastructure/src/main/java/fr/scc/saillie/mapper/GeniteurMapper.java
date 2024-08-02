@@ -22,6 +22,8 @@ public class GeniteurMapper implements RowMapper<Geniteur> {
         return new Geniteur(
             rs.getInt("IDENT_RCHIEN")
             , rs.getInt("IDENT_RRACE")
+            , rs.getString("TATOUAGE")
+            , rs.getString("PUCE")
             , DateUtils.convertStringToLocalDate(rs.getString("DATE_NAISSANCE"))
             , DateUtils.convertStringToLocalDate(rs.getString("DATE_DECES"))
             , TYPE_INSCRIPTION.valueOf(rs.getString("TYPE_INSCRIPTION"))
