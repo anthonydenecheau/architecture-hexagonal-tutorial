@@ -14,6 +14,7 @@ import fr.scc.saillie.geniteur.model.Personne;
 import fr.scc.saillie.geniteur.model.Race;
 import fr.scc.saillie.geniteur.spi.AdnInventory;
 import fr.scc.saillie.geniteur.spi.GeniteurInventory;
+import fr.scc.saillie.geniteur.spi.IcadInventory;
 import fr.scc.saillie.geniteur.spi.PersonneInventory;
 import fr.scc.saillie.geniteur.spi.RaceInventory;
 
@@ -22,7 +23,7 @@ public abstract class AbstractReglementGeniteur implements IReglementationGenite
     List<Message> messages = new ArrayList<Message>();
 
     @Override
-    public List<Message> execute(int idEleveur, LocalDate dateSaillie, Geniteur geniteur, PersonneInventory personneInventory, GeniteurInventory geniteurInventory, RaceInventory raceInventory, AdnInventory adnInventory) throws GeniteurException {
+    public List<Message> execute(int idEleveur, LocalDate dateSaillie, Geniteur geniteur, PersonneInventory personneInventory, GeniteurInventory geniteurInventory, RaceInventory raceInventory, AdnInventory adnInventory, IcadInventory icadInventory) throws GeniteurException {
         
         try {
             Personne eleveur = personneInventory.byId(idEleveur, PROFIL.ELEVEUR);
@@ -42,7 +43,7 @@ public abstract class AbstractReglementGeniteur implements IReglementationGenite
             }
             
             // Contrôle la date de décès pour la femelle
-            if (!_g.isAliveWhenSaillieHasBeenDone(dateSaillie)) {
+            if (!_g.isAliveWhenSaillieHasBeenDone(dateSaillie, icadInventory)) {
                 messages.add(new Message(LEVEL.ERROR,MESSAGE_APPLICATION.GENITEUR_DECES.code,MESSAGE_APPLICATION.GENITEUR_DECES.message));
                 return messages;
             }

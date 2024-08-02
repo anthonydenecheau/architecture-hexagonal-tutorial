@@ -14,6 +14,7 @@ import fr.scc.saillie.geniteur.model.LEVEL;
 import fr.scc.saillie.geniteur.model.Message;
 import fr.scc.saillie.geniteur.spi.AdnInventory;
 import fr.scc.saillie.geniteur.spi.GeniteurInventory;
+import fr.scc.saillie.geniteur.spi.IcadInventory;
 import fr.scc.saillie.geniteur.spi.PersonneInventory;
 import fr.scc.saillie.geniteur.spi.RaceInventory;
 
@@ -29,12 +30,14 @@ public class GeniteurUseCase implements ValidateGeniteur {
     private final GeniteurInventory geniteurInventory;
     private final PersonneInventory personneInventory;
     private final AdnInventory adnInventory;
+    private final IcadInventory icadInventory;
 
-    public GeniteurUseCase(PersonneInventory personneInventory, GeniteurInventory geniteurInventory, RaceInventory raceInventory, AdnInventory adnInventory) {
+    public GeniteurUseCase(PersonneInventory personneInventory, GeniteurInventory geniteurInventory, RaceInventory raceInventory, AdnInventory adnInventory, IcadInventory icadInventory) {
         this.personneInventory = personneInventory;
         this.geniteurInventory = geniteurInventory;
         this.raceInventory = raceInventory;
         this.adnInventory = adnInventory;
+        this.icadInventory = icadInventory;
     }
     
     /** 
@@ -53,7 +56,7 @@ public class GeniteurUseCase implements ValidateGeniteur {
             // Denier Reglement en cours; il faudrait ajouter l'ancien règlement côté DS (2020) et Adn (2023)
             // Au total ce sont 3 règlements qui doivent être implémentés (car on a fait le choix de regrouper le règlement DS et ADN au sein d'un seul et même règlement)
             IReglementationGeniteur reglementationGeniteur = ReglementationFactory.createReglementationGeniteur(dateSaillie);
-            messages = reglementationGeniteur.execute(idEleveur, dateSaillie, geniteur, personneInventory, geniteurInventory, raceInventory, adnInventory);
+            messages = reglementationGeniteur.execute(idEleveur, dateSaillie, geniteur, personneInventory, geniteurInventory, raceInventory, adnInventory, icadInventory);
 
         } catch (Exception e) {
             messages.add(new Message(LEVEL.ERROR,"900",e.getMessage()));

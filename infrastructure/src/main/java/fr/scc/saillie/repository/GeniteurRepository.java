@@ -39,6 +39,8 @@ public class GeniteurRepository implements GeniteurInventory {
         Geniteur geniteur = null;
         String sql = "SELECT c.IDENT_RCHIEN " +
             " , c.IDENT_RRACE " +
+            " , c.XCODE_TATOUAGE TATOUAGE " +
+            " , c.XCODE_TRANSPONDEUR PUCE " +
             " , TO_CHAR(c.DATE_NAISSANCE,'DD/MM/YYYY') DATE_NAISSANCE " +
             " , TO_CHAR(c.DATE_DECES,'DD/MM/YYYY') DATE_DECES " +
             " , CASE c.IDENT_TYP_DEMANDE_INSCRI_LOF " +

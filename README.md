@@ -187,6 +187,7 @@ Résumé des règles implémentées.
       - Message : la lice est déclarée morte à la date de saillie
   * GeniteurUseCaseTest
       - should_not_authorize_femelle_deces
+      - should_not_authorize_femelle_deces_icad
   * GeniteurApplicationITTests
       - whenPostRequestAndValidGeniteurAndLiceDeces_thenCorrectReponse
   * [TODO] : si date de décès non renseignée dans le LOF, il faut aller de tenter la lire chez ICad
@@ -369,4 +370,15 @@ La classe `AbstractReglementGeniteur` regroupe le tronc commun de l'ensemble des
 Selon la règlementation qui doit être appliquée, certaines règles ne seront pas implémentées.\
 Par exemple, le contrôle sur l'enregistrement obligatoire de l'empreinte Adn du géniteur dans le LOF n'est valable que pour la règlementation du 04/09/2023.\
 En conséquence, une méthode abstraite `hasValidProfileAdn` a été créée et celle-ci ne sera implémentée que pour cette réglementation. 
+
+
+### branch feature/step12
+
+La méthode `isAliveWhenSaillieHasBeenDone` qui contrôle que la femelle n'est pas décédée est enrichie.\
+Seul Icad est en mesure de nous confirmer en dernier ressort, cette information lorsque le LOF ne dipose de cet élément.\
+Il s'agit donc d'appeler le WS côté Icad, et d'extraire de la réponse la date de decès.
+
+Un spi (port) `IcadInventory` est crée : 2 nouvelles entrées sont nécessaires : le tatouage et la puce du géniteur. La classe `Geniteur`est modifiée en conséquence.\
+Côté implémentation (adapter), cela se présente dans le module `infrastructure` par un RestClient `IcadClient`.\
+Aucun impact s/ l'objet `GeniteurRequest` : la puce et/ou le tatouage du géniteur seront extraites depuis `GeniteurInventory`.
 

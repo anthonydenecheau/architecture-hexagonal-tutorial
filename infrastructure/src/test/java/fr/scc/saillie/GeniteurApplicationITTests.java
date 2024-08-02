@@ -281,7 +281,7 @@ public class GeniteurApplicationITTests {
 
     @TestConfiguration
     @ComponentScan(
-        basePackages = {"fr.scc.saillie.geniteur","fr.scc.saillie.repository"})   
+        basePackages = {"fr.scc.saillie.geniteur","fr.scc.saillie.repository"/* ,"fr.scc.saillie.icadapi"*/})   
     static class TestsConfiguration {
         @Bean
         public JdbcTemplate jdbcTemplate(DataSource dataSource) {

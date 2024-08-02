@@ -6,15 +6,12 @@ import java.text.ParseException;
 
 import fr.scc.saillie.ddd.Stub;
 import fr.scc.saillie.geniteur.error.GeniteurException;
-import fr.scc.saillie.geniteur.model.Confirmation;
 import fr.scc.saillie.geniteur.model.Geniteur;
-import fr.scc.saillie.geniteur.model.SEXE;
-import fr.scc.saillie.geniteur.model.TYPE_INSCRIPTION;
-import fr.scc.saillie.geniteur.spi.GeniteurInventory;
+import fr.scc.saillie.geniteur.spi.IcadInventory;
 import fr.scc.saillie.geniteur.utils.DateUtils;
 
 @Stub
-public class GeniteurInventoryStub implements GeniteurInventory {
+public class IcadInventoryStub implements IcadInventory {
 
     private static final Geniteur DEFAULT_GENITEUR;
     
@@ -28,34 +25,34 @@ public class GeniteurInventoryStub implements GeniteurInventory {
 
     private final Geniteur geniteur;
 
-    public GeniteurInventoryStub() {
+    public IcadInventoryStub() {
         geniteur = DEFAULT_GENITEUR;
     }
 
-    public GeniteurInventoryStub(Geniteur geniteur) {
+    public IcadInventoryStub(Geniteur geniteur) {
         this.geniteur = geniteur;
     }
 
     private static Geniteur initialiserGeniteur() throws ParseException {
         return new Geniteur(
-            1
-            , 56
+            0
+            , 0
             , "2DND115"
             , null
             , DateUtils.convertStringToLocalDate("01/01/2022")
-            , null 
-            , TYPE_INSCRIPTION.DESCENDANCE 
-            , SEXE.FEMELLE
-            , new Confirmation(202000001, 1235, DateUtils.convertStringToLocalDate("01/02/2023"), true, false, false)
+            , null
+            , null
+            , null
+            , null
             , asList()
             , asList()
-            , true
-            , true
+            , false
+            , false
         );
     }
 
     @Override
-    public Geniteur byId(Integer id) throws GeniteurException {
+    public Geniteur byIdentifiant(String tatouage, String puce) throws GeniteurException {
         return geniteur;
     }
 
